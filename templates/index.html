@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocó Limpio | Reciclaje Fluvial Premium 2025</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        :root {
+            --verde-rio: #1a5f3d; --azul-pacifico: #0a3d62; --oro-choco: #d4a017; --blanco-perla: #f8f9fa; --gris-suave: #e9ecef; --texto: #2d3436; --bg-body: #f8f9fa; --card-bg: white;
+        }
+        [data-theme="dark"] { --verde-rio: #2d6a4f; --azul-pacifico: #1e3a5f; --oro-choco: #f4c430; --blanco-perla: #1a1a1a; --gris-suave: #2d2d2d; --texto: #e0e0e0; --bg-body: #0f1a1e; --card-bg: #1a2a2a; }
+        * { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; letter-spacing: -0.5px; }
+        body { background: linear-gradient(135deg, var(--bg-body) 0%, color-mix(in srgb, var(--bg-body) 90%, #000) 100%); color: var(--texto); transition: all 0.4s ease; overflow-x: hidden; }
+
+        /* NAVBAR FIJO */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1030;
+            backdrop-filter: blur(12px); background: rgba(26,95,61,0.15) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.2); padding: 1rem 0; transition: all 0.4s ease;
+        }
+        .navbar.scrolled { background: rgba(26,95,61,0.95) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.1); padding: 0.75rem 0; }
+        .navbar-brand { font-weight: 700; font-size: 1.8rem; color: white !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .nav-link { color: white !important; font-weight: 500; padding: 0.5rem 1rem !important; border-radius: 50px; transition: all 0.3s ease; }
+        .nav-link:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+        /* HERO */
+        .hero { min-height: 100vh; padding-top: 100px; position: relative; overflow: hidden; color: white; }
+        #heroVideo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(26,95,61,0.8), rgba(10,61,98,0.7)); z-index: -1; }
+
+        /* SECCIONES FULLSCREEN */
+        #servicios, #como, #contacto { min-height: 100vh; padding: 140px 0; display: flex; align-items: center; }
+        #servicios { background: linear-gradient(135deg, rgba(26,95,61,0.05), transparent); }
+        #como { background: linear-gradient(135deg, rgba(10,61,98,0.05), transparent); }
+        #contacto { background: linear-gradient(135deg, var(--azul-pacifico), var(--verde-rio)); color: white; }
+
+        .btn-premium { background: linear-gradient(45deg, var(--oro-choco), #f1c40f); color: white; border: none; padding: 14px 36px; border-radius: 50px; font-weight: 600; box-shadow: 0 8px 25px rgba(212,160,23,0.3); transition: all 0.4s ease; }
+        [data-theme="dark"] .btn-premium { background: linear-gradient(45deg, #f4c430, #e67e22); }
+        .btn-premium:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(212,160,23,0.4); }
+
+        .card-premium { background: var(--card-bg); border: none; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: all 0.4s ease; }
+        .card-premium::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--verde-rio), var(--oro-choco)); }
+        .card-premium:hover { transform: translateY(-15px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
+        .card-premium .icon { width: 80px; height: 80px; background: linear-gradient(135deg, var(--verde-rio), var(--azul-pacifico)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 2rem; box-shadow: 0 8px 20px rgba(26,95,61,0.3); }
+
+        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 0; }
+
+        .timeline { position: relative; }
+        .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: var(--oro-choco); transform: translateX(-50%); }
+        .timeline-item { margin: 50px 0; position: relative; }
+        .timeline-item:nth-child(odd) .timeline-content { text-align: right; padding-right: 60px; }
+        .timeline-item:nth-child(even) .timeline-content { text-align: left; padding-left: 60px; }
+        .timeline-icon { width: 60px; height: 60px; background: var(--oro-choco); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.8rem; z-index: 1; }
+
+        #map { height: 400px; border-radius: 20px; }
+
+        #themeToggle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <!-- NAVBAR FIJO -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="bi bi-droplet-fill"></i> Chocó Limpio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#como">Cómo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                    <li class="nav-item"><button id="themeToggle" class="btn btn-outline-light ms-3"><i class="bi bi-sun-fill"></i></button></li>
+                    <li class="nav-item"><button class="btn btn-outline-light ms-2" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="bi bi-person"></i> Iniciar</button></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="inicio" class="hero d-flex align-items-center">
+        <video autoplay muted loop playsinline id="heroVideo">
+            <source src="assets/video-rio.mp4" type="video/mp4">
+        </video>
+        <div class="container text-center" data-aos="fade-up">
+            <h1>Reciclamos el Río, Salvamos el Futuro</h1>
+            <p class="lead">Lanchas premium, pago en minutos, impacto real. Tú reciclas, el Chocó brilla.</p>
+            <button class="btn btn-premium btn-lg mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">
+                Únete al Cambio <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-5">Servicios Premium Fluvial</h2>
+                <p class="lead">Tecnología de punta para el Chocó real</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-premium text-center p-4 h-100">
+                        <div class="icon"><i class="bi bi-truck"></i></div>
+                        <h5>Lanchas GPS</h5>
+                        <p>Rutas en vivo, notificaciones por WhatsApp, llegada en <strong>15 min</strong>.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-premium text-center p-4 h-100">
+                        <div class="icon"><i class="bi bi-phone-vibrate"></i></div>
+                        <h5>Minutos Premium</h5>
+                        <p>1 kg = 15 min. Recargas al instante. <strong>¡Sin saldo, sin problema!</strong></p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-premium text-center p-4 h-100">
+                        <div class="icon"><i class="bi bi-shield-check"></i></div>
+                        <h5>Certificado INVEMAR</h5>
+                        <p>Impacto medible: <strong>1 kg = 1 árbol plantado</strong> en el Atrato.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card-premium text-center p-4 h-100">
+                        <div class="icon"><i class="bi bi-currency-exchange"></i></div>
+                        <h5>Pago en Efectivo</h5>
+                        <p>Opción para quienes no usan minutos. <strong>$1.500 por kg</strong>.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="card-premium text-center p-4 h-100">
+                        <div class="icon"><i class="bi bi-people"></i></div>
+                        <h5>Comunidad Activa</h5>
+                        <p>Grupos de WhatsApp por barrio. <strong>¡Gana bonos por referidos!</strong></p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="card-premium text-center p-4 h-100">
+                        <div class="icon"><i class="bi bi-trophy"></i></div>
+                        <h5>Ranking Mensual</h5>
+                        <p>Top 10 recicladores ganan <strong>1 hora de internet gratis</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section id="como">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-5">¿Cómo Funciona?</h2>
+                <p class="lead">5 pasos simples para cambiar el río</p>
+            </div>
+            <div class="timeline" data-aos="fade-up">
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="bi bi-1-circle-fill"></i></div>
+                    <div class="timeline-content">
+                        <h5>Separa en casa</h5>
+                        <p>Plástico, vidrio, metal y orgánicos en bolsas diferentes.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="bi bi-2-circle-fill"></i></div>
+                    <div class="timeline-content">
+                        <h5>Pesa y fotografía</h5>
+                        <p>Usa tu celular. 1 foto = 1 reporte.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="bi bi-3-circle-fill"></i></div>
+                    <div class="timeline-content">
+                        <h5>Envía por WhatsApp</h5>
+                        <p>Manda foto + peso al <strong>312 456 7890</strong>.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="bi bi-4-circle-fill"></i></div>
+                    <div class="timeline-content">
+                        <h5>Lancha GPS llega</h5>
+                        <p>Notificación en vivo. <strong>ETA exacta</strong>.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="bi bi-5-circle-fill"></i></div>
+                    <div class="timeline-content">
+                        <h5>¡Gana al instante!</h5>
+                        <p>Minutos en tu celular o efectivo. <strong>¡Tú eliges!</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h2 class="display-5 mb-4">Contáctanos</h2>
+                    <form>
+                        <div class="mb-3">
+                            <input type="text" class="form-control form-control-lg" placeholder="Tu nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="tel" class="form-control form-control-lg" placeholder="312 456 7890" required>
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control form-control-lg" rows="4" placeholder="Tu mensaje"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-light btn-lg w-100">Enviar Mensaje</button>
+                    </form>
+                    <div class="mt-4">
+                        <p><strong>Horarios:</strong> Lunes a Sábado 6:00 AM - 6:00 PM</p>
+                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/573124567890" class="text-white">312 456 7890</a></p>
+                        <p><strong>Correo:</strong> contacto@chocolimpio.co</p>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div id="map"></div>
+                    <div class="mt-3 text-center">
+                        <small class="text-white-50">Punto de recolección principal: Muelle Turístico, Quibdó</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-5 text-white" style="background: linear-gradient(135deg, var(--azul-pacifico), var(--verde-rio));">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Chocó Limpio Premium 2025</h5>
+                    <p>Reciclaje fluvial con tecnología de punta. Por el río, para la gente.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p><strong>Conéctate:</strong></p>
+                    <a href="#" class="text-white me-3"><i class="bi bi-whatsapp fs-3"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-3"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-facebook fs-3"></i></a>
+                </div>
+            </div>
+            <hr class="bg-white opacity-20">
+            <div class="text-center">
+                <small>© 2025 Chocó Limpio. Hecho con orgullo en Quibdó, Chocó.</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL LOGIN -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Iniciar Sesión</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono, nombre o correo</label>
+                            <input type="text" class="form-control" placeholder="3124567890" required>
+                        </div>
+                        <button type="submit" class="btn btn-premium w-100">Entrar</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#recuperarModal" data-bs-dismiss="modal">¿Olvidaste tu contraseña?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL REGISTRO -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Crear Cuenta</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="mb-3"><label class="form-label">Nombre completo</label><input type="text" name="nombre" class="form-control" placeholder="Juan Pérez" required></div>
+                        <div class="mb-3"><label class="form-label">Teléfono (WhatsApp)</label><input type="tel" name="telefono" class="form-control" placeholder="3124567890" required></div>
+                        <div class="mb-3"><label class="form-label">Correo electrónico <small class="text-muted">(opcional)</small></label><input type="email" name="email" class="form-control" placeholder="juan@gmail.com"></div>
+                        <div class="mb-3"><label class="form-label">Barrio / Vereda</label><input type="text" name="barrio" class="form-control" placeholder="ej: La Yesquita" required></div>
+                        <div class="mb-3"><label class="form-label">Fecha de nacimiento <span class="text-danger">*</span></label><input type="date" class="form-control" id="registroFechaNac" required><small class="text-muted">Debes tener al menos 13 años</small></div>
+                        <div class="mb-3"><label class="form-label">Pregunta de seguridad <span class="text-danger">*</span></label>
+                            <select class="form-control" id="preguntaSeguridad" required>
+                                <option value="">Elige una pregunta...</option>
+                                <option value="nombre_mascota">¿Cómo se llama tu primera mascota?</option>
+                                <option value="lugar_nacimiento">¿En qué barrio naciste?</option>
+                                <option value="nombre_maestro">¿Nombre de tu primer maestro?</option>
+                                <option value="comida_favorita">¿Cuál es tu comida favorita del Chocó?</option>
+                            </select>
+                        </div>
+                        <div class="mb-3"><label class="form-label">Respuesta <span class="text-danger">*</span></label><input type="text" class="form-control" id="respuestaSeguridad" placeholder="Escribe tu respuesta" required></div>
+                        <button type="submit" class="btn btn-premium w-100">Crear cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL RECUPERAR -->
+    <div class="modal fade" id="recuperarModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title">Recuperar Contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="recuperarForm">
+                        <div class="mb-3"><label class="form-label">Teléfono registrado</label><input type="tel" class="form-control" id="recuperarTelefono" placeholder="3124567890" required></div>
+                        <button type="submit" class="btn btn-premium w-100">Enviar código</button>
+                    </form>
+                    <div id="pasoPregunta" style="display: none;"><hr><p><strong>Pregunta de seguridad:</strong></p><p id="preguntaTexto" class="fw-bold"></p><div class="mb-3"><input type="text" class="form-control" id="respuestaInput" placeholder="Tu respuesta" required></div><button class="btn btn-success w-100" onclick="verificarRespuesta()">Verificar</button></div>
+                    <div id="pasoNuevaContra" style="display: none;"><hr><p><strong>Crea una nueva contraseña</strong></p><div class="mb-3"><input type="password" class="form-control" id="nuevaContra" placeholder="Mínimo 6 caracteres" required></div><div class="mb-3"><input type="password" class="form-control" id="confirmarContra" placeholder="Repite la contraseña" required></div><button class="btn btn-premium w-100" onclick="cambiarContraseña()">Cambiar Contraseña</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // NAVBAR SCROLL
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            navbar.classList.toggle('scrolled', window.scrollY > 100);
+        });
+
+        // PARTICLES
+        particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#0d6efd" }, "shape": { "type": "circle" }, "opacity": { "value": 0.5 }, "size": { "value": 3 }, "move": { "enable": true, "speed": 2 } }, "interactivity": { "events": { "onhover": { "enable": true, "mode": "repulse" } } } });
+
+        // MAPA
+        const map = L.map('map').setView([5.692, -76.657], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.marker([5.692, -76.657]).addTo(map)
+            .bindPopup('<b>Muelle Turístico</b><br>Recolección diaria 8:00 AM')
+            .openPopup();
+
+        // MODO OSCURO
+        const themeToggle = document.getElementById('themeToggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
+        }
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // REGISTRO
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                nombre: formData.get('nombre'),
+                telefono: formData.get('telefono'),
+                barrio: formData.get('barrio'),
+                email: formData.get('email'),
+                fecha_nac: document.getElementById('registroFechaNac').value,
+                pregunta: document.getElementById('preguntaSeguridad').value,
+                respuesta: document.getElementById('respuestaSeguridad').value
+            };
+
+            const res = await fetch('/registro', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const json = await res.json();
+            if (json.success) {
+                window.location.href = json.redirect;
+            } else {
+                alert(json.error);
+            }
+        });
+
+        // LOGIN
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const identificador = this.querySelector('input').value;
+            const res = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identificador, contraseña: '123456' })
+            });
+            const json = await res.json();
+            if (json.success) {
+                window.location.href = json.redirect;
+            } else {
+                alert(json.error);
+            }
+        });
+
+        // RECUPERAR CONTRASEÑA
+        let telefonoRecuperar = '';
+        document.getElementById('recuperarForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            telefonoRecuperar = document.getElementById('recuperarTelefono').value;
+            const res = await fetch('/recuperar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ telefono: telefonoRecuperar })
+            });
+            const json = await res.json();
+            if (json.pregunta) {
+                document.getElementById('recuperarForm').style.display = 'none';
+                document.getElementById('pasoPregunta').style.display = 'block';
+                const preguntas = {
+                    'nombre_mascota': '¿Cómo se llama tu primera mascota?',
+                    'lugar_nacimiento': '¿En qué barrio naciste?',
+                    'nombre_maestro': '¿Nombre de tu primer maestro?',
+                    'comida_favorita': '¿Cuál es tu comida favorita del Chocó?'
+                };
+                document.getElementById('preguntaTexto').textContent = preguntas[json.pregunta];
+            } else {
+                alert(json.error);
+            }
+        });
+
+        async function verificarRespuesta() {
+            const respuesta = document.getElementById('respuestaInput').value;
+            const res = await fetch('/verificar_respuesta', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ telefono: telefonoRecuperar, respuesta })
+            });
+            const json = await res.json();
+            if (json.success) {
+                document.getElementById('pasoPregunta').style.display = 'none';
+                document.getElementById('pasoNuevaContra').style.display = 'block';
+                window.user_id = json.user_id;
+            } else {
+                alert(json.error);
+            }
+        }
+
+        async function cambiarContraseña() {
+            const nueva = document.getElementById('nuevaContra').value;
+            const confirmar = document.getElementById('confirmarContra').value;
+            if (nueva !== confirmar) return alert('No coinciden');
+            const res = await fetch('/cambiar_contraseña', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: window.user_id, nueva })
+            });
+            const json = await res.json();
+            if (json.success) {
+                alert('¡Contraseña cambiada!');
+                bootstrap.Modal.getInstance(document.getElementById('recuperarModal')).hide();
+            }
+        }
+    </script>
+</body>
+</html>
