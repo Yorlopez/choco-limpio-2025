@@ -68,7 +68,6 @@
 
     <div id="particles-js"></div>
 
-    <!-- NAVBAR FIJO -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#"><i class="bi bi-droplet-fill"></i> Chocó Limpio</a>
@@ -88,10 +87,9 @@
         </div>
     </nav>
 
-    <!-- HERO -->
     <section id="inicio" class="hero d-flex align-items-center">
         <video autoplay muted loop playsinline id="heroVideo">
-            <source src="assets/video-rio.mp4" type="video/mp4">
+            <source src="{{ url_for('static', filename='assets/video-rio.mp4') }}" type="video/mp4">
         </video>
         <div class="container text-center" data-aos="fade-up">
             <h1>Reciclamos el Río, Salvamos el Futuro</h1>
@@ -102,7 +100,6 @@
         </div>
     </section>
 
-    <!-- SERVICIOS -->
     <section id="servicios">
         <div class="container">
             <div class="text-center mb-5" data-aos="fade-up">
@@ -156,7 +153,6 @@
         </div>
     </section>
 
-    <!-- CÓMO FUNCIONA -->
     <section id="como">
         <div class="container">
             <div class="text-center mb-5" data-aos="fade-up">
@@ -203,7 +199,6 @@
         </div>
     </section>
 
-    <!-- CONTACTO -->
     <section id="contacto">
         <div class="container">
             <div class="row">
@@ -223,8 +218,8 @@
                     </form>
                     <div class="mt-4">
                         <p><strong>Horarios:</strong> Lunes a Sábado 6:00 AM - 6:00 PM</p>
-                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/573124567890" class="text-white">312 456 7890</a></p>
-                        <p><strong>Correo:</strong> contacto@chocolimpio.co</p>
+                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/573137527364" class="text-white">313 752 7364</a></p>
+                        <p><strong>Correo:</strong> mosqueralopezyoryani@gmail.com</p>
                     </div>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
@@ -283,7 +278,6 @@
         </div>
     </div>
 
-    <!-- MODAL REGISTRO -->
     <div class="modal fade" id="registerModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -315,7 +309,6 @@
         </div>
     </div>
 
-    <!-- MODAL RECUPERAR -->
     <div class="modal fade" id="recuperarModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -335,30 +328,25 @@
         </div>
     </div>
 
-    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
 
-        // NAVBAR SCROLL
         window.addEventListener('scroll', () => {
             const navbar = document.querySelector('.navbar');
             navbar.classList.toggle('scrolled', window.scrollY > 100);
         });
 
-        // PARTICLES
         particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#0d6efd" }, "shape": { "type": "circle" }, "opacity": { "value": 0.5 }, "size": { "value": 3 }, "move": { "enable": true, "speed": 2 } }, "interactivity": { "events": { "onhover": { "enable": true, "mode": "repulse" } } } });
 
-        // MAPA
         const map = L.map('map').setView([5.692, -76.657], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         L.marker([5.692, -76.657]).addTo(map)
             .bindPopup('<b>Muelle Turístico</b><br>Recolección diaria 8:00 AM')
             .openPopup();
 
-        // MODO OSCURO
         const themeToggle = document.getElementById('themeToggle');
         const currentTheme = localStorage.getItem('theme') || 'light';
         if (currentTheme === 'dark') {
@@ -378,7 +366,6 @@
             }
         });
 
-        // REGISTRO
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = new FormData(this);
@@ -405,7 +392,6 @@
             }
         });
 
-        // LOGIN
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const identificador = this.querySelector('input').value;
@@ -422,7 +408,6 @@
             }
         });
 
-        // RECUPERAR CONTRASEÑA
         let telefonoRecuperar = '';
         document.getElementById('recuperarForm').addEventListener('submit', async function(e) {
             e.preventDefault();

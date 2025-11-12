@@ -125,7 +125,6 @@
             </div>
         </div>
 
-        <!-- GRÁFICO + RANKING -->
         <div class="row mb-5">
             <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
                 <div class="card bg-dark text-white border-0 shadow-lg" style="border-radius: 20px;">
@@ -165,7 +164,6 @@
             </div>
         </div>
 
-        <!-- ACCIONES RÁPIDAS -->
         <div class="row mb-5">
             <div class="col-12 text-center" data-aos="zoom-in">
                 <h3 class="mb-4">Acciones Rápidas</h3>
@@ -177,7 +175,6 @@
             </div>
         </div>
 
-        <!-- IMPACTO AMBIENTAL -->
         <div class="text-center py-5" data-aos="fade-up">
             <h2 class="display-5 mb-4">Tu impacto en el río Atrato</h2>
             <p class="lead fs-4">Has evitado que <strong class="text-warning">{{ (user.kg_reciclados * 2.5)|round(1) }} kg de CO₂</strong> lleguen al ambiente.</p>
@@ -196,13 +193,11 @@
 
     </div>
 
-    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
 
-        // HORA EN VIVO (COLOMBIA -05)
         function updateTime() {
             const now = new Date();
             const options = { timeZone: 'America/Bogota', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -211,7 +206,6 @@
         updateTime();
         setInterval(updateTime, 1000);
 
-        // GRÁFICO INICIAL
         let chart = null;
         function initChart() {
             const ctx = document.getElementById('progressChart').getContext('2d');
@@ -238,7 +232,6 @@
             });
         }
 
-        // AUTO-UPDATE CADA 30 SEGUNDOS
         async function updateStats() {
             const response = await fetch('/api/stats');
             const data = await response.json();
@@ -247,14 +240,13 @@
                 document.getElementById('minutosTotal').textContent = data.minutos;
                 document.getElementById('arbolesTotal').textContent = Math.floor(data.kg_reciclados);
 
-                // ACTUALIZA GRÁFICO
                 chart.data.datasets[0].data[6] = data.kg_reciclados;
                 chart.update('none');
             }
         }
 
         initChart();
-        setInterval(updateStats, 30000);  // 30 segundos
+        setInterval(updateStats, 30000);  
     </script>
 </body>
 </html>
