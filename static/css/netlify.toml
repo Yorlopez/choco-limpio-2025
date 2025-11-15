@@ -1,0 +1,14 @@
+[build]
+  # Directorio donde se colocarán los archivos estáticos (CSS, JS, imágenes)
+  publish = "static"
+  # Directorio donde residen las funciones serverless
+  functions = "netlify/functions"
+
+[[redirects]]
+  # Esta es la regla mágica:
+  # Captura TODAS las peticiones que llegan a tu sitio...
+  from = "/*"
+  # ...y las redirige a nuestra función serverless que ejecuta Flask.
+  to = "/.netlify/functions/main"
+  # El status 200 significa que es una reescritura, no una redirección visible para el usuario.
+  status = 200

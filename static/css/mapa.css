@@ -1,0 +1,4 @@
+  body { background: #0f1a1e; color: white; min-height: 100vh; }
+        .navbar { background: rgba(26,95,61,0.95); }
+        .map-container { height: 80vh; background: #1a2a44; border-radius: 20px; }
+        

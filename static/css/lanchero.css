@@ -1,0 +1,28 @@
+body {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.reporte-card {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 15px;
+    transition: transform 0.2s;
+}
+
+/* Solución para el texto invisible en las tarjetas */
+.reporte-card .card-body {
+    color: #f0f0f0; /* Forzamos un color de texto claro */
+}
+
+.reporte-card:hover {
+    transform: translateY(-5px);
+}
+
+.reporte-imagen {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    cursor: pointer; /* Indica que la imagen es clickeable */
+}

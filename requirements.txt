@@ -1,0 +1,5 @@
+Flask
+supabase
+gunicorn
+python-dotenv
+httpx
