@@ -1,52 +1,50 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- FAVICONS -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}">
-    <title>Reportar | Chocó Limpio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/reportar.css">
-</head>
-<body>
-    <div class="container">
-        <div class="text-center mb-4">
-            <a href="/dashboard" class="back-link"><i class="bi bi-arrow-left"></i> Volver</a>
-        </div>
-        <div class="report-card">
-            <div class="text-center mb-4">
-                <h2 class="display-6 fw-bold"><i class="bi bi-camera-fill text-warning"></i> Reportar Recolección</h2>
-            </div>
-            <!-- Contenedor para los mensajes de éxito o error -->
-            <div id="alert-container"></div>
-            <form id="reportarForm">
-                <div class="mb-3">
-                    <label class="form-label">Peso reciclado (kg)</label>
-                    <input type="number" name="kg" step="0.1" class="form-control form-control-lg" placeholder="Ej: 2.5" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Foto del material</label>
-                    <input type="file" name="foto" accept="image/*" class="form-control form-control-lg" required>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label">Ubicación (opcional)</label>
-                    <input type="text" name="ubicacion" class="form-control" placeholder="Ej: Frente a la cancha">
-                </div>
-                <button type="submit" class="btn btn-premium w-100 btn-lg">Enviar Reporte</button>
-            </form>
-            <div id="successMsg" class="alert alert-success mt-4 text-center" style="display:none;">
-                Reporte enviado! Lancha en camino
-            </div>
-        </div>
-    </div>
+<!DOCTYPE html> <!-- Le digo al navegador que este es un documento HTML5. -->
+<html lang="es"> <!-- La etiqueta raíz de mi página, en español. -->
+<head> <!-- Aquí va toda la información que el navegador necesita pero que no se ve en la página. -->
+    <meta charset="UTF-8"> <!-- Le digo al navegador que use los caracteres estándar para que no haya problemas con las tildes o la 'ñ'. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hago que la página se vea bien en cualquier dispositivo, adaptándose al ancho de la pantalla. -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}"> <!-- Este es el icono principal (favicon) de mi página. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}"> <!-- Un icono de 32x32 píxeles. -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}"> <!-- Un icono más pequeño de 16x16 píxeles. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"> <!-- El icono que se usará si alguien guarda mi web en la pantalla de inicio de un iPhone. -->
+    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}"> <!-- Un archivo que le da más información a los navegadores sobre mi aplicación web. -->
+    <title>Reportar | Chocó Limpio</title> <!-- Este es el texto que aparece en la pestaña del navegador. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Cargo los estilos de Bootstrap desde un CDN para que todo se vea ordenado. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"> <!-- Cargo la librería de iconos de Bootstrap para poder usar iconitos. -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"> <!-- Cargo las fuentes 'Inter' y 'Playfair Display' desde Google Fonts. -->
+    <link rel="stylesheet" href="/static/css/reportar.css"> <!-- Cargo mi propia hoja de estilos, donde personalizo la apariencia de esta página. -->
+</head> <!-- Aquí termina la sección de configuración de la cabeza. -->
+<body> <!-- Aquí empieza todo el contenido visible de mi página. -->
+    <div class="container"> <!-- El contenedor principal de la página, para centrar el contenido. -->
+        <div class="text-center mb-4"> <!-- Un contenedor para centrar el enlace de "Volver". -->
+            <a href="/dashboard" class="back-link"><i class="bi bi-arrow-left"></i> Volver</a> <!-- Un enlace con una flecha para volver al dashboard. -->
+        </div> <!-- Cierro el contenedor del enlace. -->
+        <div class="report-card"> <!-- La tarjeta que contiene el formulario, con estilos personalizados. -->
+            <div class="text-center mb-4"> <!-- Un contenedor para centrar el título. -->
+                <h2 class="display-6 fw-bold"><i class="bi bi-camera-fill text-warning"></i> Reportar Recolección</h2> <!-- El título de la página, con un icono de cámara. -->
+            </div> <!-- Cierro el contenedor del título. -->
+            <div id="alert-container"></div> <!-- Un contenedor vacío donde mi JavaScript mostrará las alertas de éxito o error. -->
+            <form id="reportarForm"> <!-- El formulario para enviar el reporte. Mi JavaScript lo va a controlar. -->
+                <div class="mb-3"> <!-- Un contenedor para el campo de los kilos. -->
+                    <label class="form-label">Peso reciclado (kg)</label> <!-- La etiqueta del campo. -->
+                    <input type="number" name="kg" step="0.1" class="form-control form-control-lg" placeholder="Ej: 2.5" required> <!-- El campo para ingresar el peso, que solo acepta números y permite decimales. -->
+                </div> <!-- Cierro el contenedor. -->
+                <div class="mb-3"> <!-- Un contenedor para el campo de la foto. -->
+                    <label class="form-label">Foto del material</label> <!-- La etiqueta. -->
+                    <input type="file" name="foto" accept="image/*" class="form-control form-control-lg" required> <!-- El campo para subir la foto, que solo acepta archivos de imagen. -->
+                </div> <!-- Cierro el contenedor. -->
+                <div class="mb-4"> <!-- Un contenedor para el campo de ubicación. -->
+                    <label class="form-label">Ubicación (opcional)</label> <!-- La etiqueta. -->
+                    <input type="text" name="ubicacion" class="form-control" placeholder="Ej: Frente a la cancha"> <!-- El campo opcional para describir la ubicación. -->
+                </div> <!-- Cierro el contenedor. -->
+                <button type="submit" class="btn btn-premium w-100 btn-lg">Enviar Reporte</button> <!-- El botón para enviar el formulario, grande y que ocupa todo el ancho. -->
+            </form> <!-- Cierro el formulario. -->
+            <div id="successMsg" class="alert alert-success mt-4 text-center" style="display:none;"> <!-- Un mensaje de éxito que está oculto por defecto. -->
+                Reporte enviado! Lancha en camino <!-- El texto del mensaje. -->
+            </div> <!-- Cierro el mensaje de éxito. -->
+        </div> <!-- Cierro la tarjeta del formulario. -->
+    </div> <!-- Cierro el contenedor principal. -->
 
-    <script src="/static/js/reportar.js"></script>
-</body>
-</html>
+    <script src="/static/js/reportar.js"></script> <!-- Cargo el script de JavaScript que maneja el envío de este formulario. -->
+</body> <!-- Aquí se termina el contenido visible de la página. -->
+</html> <!-- Y aquí se termina mi archivo HTML. -->

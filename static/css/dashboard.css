@@ -1,101 +1,100 @@
-        :root {
-            --verde-rio: #1a5f3d;
-            --azul-pacifico: #0a3d62;
-            --oro-choco: #d4a017;
-            --texto: #e0e0e0;
-            --bg: #0f1a1e;
-            --card-bg: rgba(255,255,255,0.08);
-            --minutos-text: #a8e6cf;
-            --arboles-text: #87ceeb;
-        }
+:root { /* Aquí defino mis colores principales para usarlos en toda la página. */
+    --verde-rio: #1a5f3d; /* Un verde oscuro como el del río. */
+    --azul-pacifico: #0a3d62; /* Un azul profundo como el océano. */
+    --oro-choco: #d4a017; /* Un color dorado que representa la riqueza del Chocó. */
+    --texto: #e0e0e0; /* Un color de texto gris claro para que se lea bien en fondos oscuros. */
+    --bg: #0f1a1e; /* El color de fondo principal, casi negro. */
+    --card-bg: rgba(255,255,255,0.08); /* El color de fondo para mis tarjetas, un blanco muy transparente. */
+    --minutos-text: #a8e6cf; /* Un color de texto menta para los minutos. */
+    --arboles-text: #87ceeb; /* Un color de texto azul cielo para los árboles. */
+}
 
-        * { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; }
+* { font-family: 'Inter', sans-serif; } /* Le digo que todos los elementos de la página usen la fuente 'Inter'. */
+h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; } /* Pero para los títulos, quiero usar la fuente 'Playfair Display' que es más elegante. */
 
-        body {
-            background: linear-gradient(135deg, var(--bg) 0%, #1a2a2a 100%);
-            color: var(--texto);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+body { /* Le doy estilo a todo el cuerpo de la página. */
+    background: linear-gradient(135deg, var(--bg) 0%, #1a2a2a 100%); /* Pongo un fondo degradado que va de mi color de fondo a un verde muy oscuro. */
+    color: var(--texto); /* Establezco el color de texto por defecto. */
+    min-height: 100vh; /* Hago que el cuerpo ocupe al menos toda la altura de la pantalla. */
+    overflow-x: hidden; /* Evito que aparezca una barra de desplazamiento horizontal si algo se sale de la pantalla. */
+}
 
-        .navbar-dashboard {
-            background: rgba(26,95,61,0.97) !important;
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(212,160,23,0.3);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-        }
+.navbar-dashboard { /* Le doy estilo a la barra de navegación específica de esta página. */
+    background: rgba(26,95,61,0.97) !important; /* Le pongo un fondo verde semitransparente. El '!important' es para asegurarme de que este estilo gane. */
+    backdrop-filter: blur(15px); /* Le aplico un efecto de desenfoque al fondo que se ve a través de la barra. */
+    border-bottom: 1px solid rgba(212,160,23,0.3); /* Le pongo un borde dorado semitransparente en la parte de abajo. */
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4); /* Le añado una sombra para que parezca que está flotando. */
+}
 
-        .stat-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(212,160,23,0.2);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.4s ease;
-            backdrop-filter: blur(12px);
-            position: relative;
-            overflow: hidden;
-        }
+.stat-card { /* Le doy estilo a cada una de las tarjetas de estadísticas. */
+    background: var(--card-bg); /* Uso el color de fondo que definí para las tarjetas. */
+    border: 1px solid rgba(212,160,23,0.2); /* Les pongo un borde dorado muy sutil. */
+    border-radius: 24px; /* Redondeo mucho las esquinas. */
+    padding: 2rem; /* Le doy un buen espacio interior. */
+    text-align: center; /* Centro todo el texto dentro de la tarjeta. */
+    transition: all 0.4s ease; /* Hago que cualquier cambio (como el tamaño o la sombra) ocurra suavemente en 0.4 segundos. */
+    backdrop-filter: blur(12px); /* También le aplico un desenfoque al fondo de la tarjeta. */
+    position: relative; /* La pongo en modo 'relative' para poder posicionar otros elementos dentro de ella. */
+    overflow: hidden; /* Oculto cualquier cosa que se salga de los bordes redondeados de la tarjeta. */
+}
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 5px;
-            background: linear-gradient(90deg, var(--verde-rio), var(--oro-choco));
-        }
+.stat-card::before { /* Creo un pseudo-elemento que es como una barrita de color arriba de la tarjeta. */
+    content: ''; /* Es necesario para que el pseudo-elemento aparezca. */
+    position: absolute; /* Lo posiciono de forma absoluta dentro de la tarjeta. */
+    top: 0; left: 0; /* Lo pego a la esquina superior izquierda. */
+    width: 100%; height: 5px; /* Hago que ocupe todo el ancho y tenga 5px de alto. */
+    background: linear-gradient(90deg, var(--verde-rio), var(--oro-choco)); /* Le pongo un degradado de verde a dorado. */
+}
 
-        .stat-card:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 25px 50px rgba(212,160,23,0.25);
-        }
+.stat-card:hover { /* Defino lo que pasa cuando paso el ratón sobre la tarjeta. */
+    transform: translateY(-12px) scale(1.03); /* La muevo un poco hacia arriba y la hago un poquito más grande. */
+    box-shadow: 0 25px 50px rgba(212,160,23,0.25); /* Le pongo una sombra dorada más pronunciada. */
+}
 
-        .stat-icon {
-            width: 85px; height: 85px;
-            background: linear-gradient(135deg, var(--verde-rio), var(--azul-pacifico));
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 1rem;
-            color: white; font-size: 2.2rem;
-            box-shadow: 0 10px 25px rgba(26,95,61,0.5);
-        }
+.stat-icon { /* Le doy estilo al círculo del icono dentro de la tarjeta. */
+    width: 85px; height: 85px; /* Le doy un tamaño fijo. */
+    background: linear-gradient(135deg, var(--verde-rio), var(--azul-pacifico)); /* Le pongo un fondo degradado. */
+    border-radius: 50%; /* Lo hago completamente redondo. */
+    display: flex; align-items: center; justify-content: center; /* Centro el icono que va adentro, tanto vertical como horizontalmente. */
+    margin: 0 auto 1rem; /* Lo centro horizontalmente y le doy un margen abajo. */
+    color: white; font-size: 2.2rem; /* Le pongo color blanco y un tamaño grande al icono. */
+    box-shadow: 0 10px 25px rgba(26,95,61,0.5); /* Le añado una sombra verde. */
+}
 
-        .progress-river {
-            height: 14px; border-radius: 50px; background: rgba(255,255,255,0.1);
-            overflow: hidden; position: relative;
-        }
+.progress-river { /* Le doy estilo a la barrita de progreso que parece un río. */
+    height: 14px; border-radius: 50px; background: rgba(255,255,255,0.1); /* Le doy altura, la redondeo y le pongo un fondo gris transparente. */
+    overflow: hidden; position: relative; /* Oculto lo que se salga y la pongo en modo 'relative' para la animación. */
+}
 
-        .progress-river::before {
-            content: ''; position: absolute; top: 0; left: 0; height: 100%;
-            background: linear-gradient(90deg, #1a5f3d, #0a3d62); width: 75%;
-            animation: flow 3.5s infinite;
-        }
+.progress-river::before { /* Creo la barrita de color que se mueve. */
+    content: ''; position: absolute; top: 0; left: 0; height: 100%; /* La posiciono al inicio y le doy toda la altura. */
+    background: linear-gradient(90deg, #1a5f3d, #0a3d62); width: 75%; /* Le pongo un degradado y un ancho. */
+    animation: flow 3.5s infinite; /* Le aplico una animación llamada 'flow' que dura 3.5s y se repite siempre. */
+}
 
-        @keyframes flow { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@keyframes flow { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } } /* Defino la animación 'flow': empieza fuera a la izquierda y termina fuera a la derecha. */
 
-        .ranking-badge {
-            width: 42px; height: 42px; background: var(--oro-choco); color: #000;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
+.ranking-badge { /* Le doy estilo a la insignia redonda del ranking. */
+    width: 42px; height: 42px; background: var(--oro-choco); color: #000; /* Le doy tamaño, fondo dorado y texto negro. */
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; /* La hago redonda y centro el número que va adentro. */
+    font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Le pongo texto en negrita, un tamaño de fuente y una sombra. */
+}
 
-        .impact-tree {
-            width: 65px; height: 65px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%231a5f3d"><path d="M12 2L2 12h3v8h14v-8h3L12 2z"/></svg>') center/contain no-repeat;
-        }
+.impact-tree { /* Le doy estilo al icono del árbol. */
+    width: 65px; height: 65px; /* Le doy un tamaño. */
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%231a5f3d"><path d="M12 2L2 12h3v8h14v-8h3L12 2z"/></svg>') center/contain no-repeat; /* Uso una imagen SVG como fondo, la centro y hago que se ajuste sin repetirse. */
+}
 
-        .btn-premium {
-            background: linear-gradient(45deg, var(--oro-choco), #f1c40f); color: white; border: none;
-            padding: 14px 36px; border-radius: 50px; font-weight: 600;
-            box-shadow: 0 10px 30px rgba(212,160,23,0.4); transition: all 0.4s ease;
-        }
+.btn-premium { /* Le doy estilo a mi botón "premium". */
+    background: linear-gradient(45deg, var(--oro-choco), #f1c40f); color: white; border: none; /* Le pongo un fondo degradado dorado, texto blanco y sin borde. */
+    padding: 14px 36px; border-radius: 50px; font-weight: 600; /* Le doy espaciado interior, lo hago redondeado y pongo el texto en negrita. */
+    box-shadow: 0 10px 30px rgba(212,160,23,0.4); transition: all 0.4s ease; /* Le pongo una sombra y una transición suave. */
+}
 
-        .btn-premium:hover {
-            transform: translateY(-5px); box-shadow: 0 18px 40px rgba(212,160,23,0.5);
-        }
+.btn-premium:hover { /* Defino lo que pasa cuando paso el ratón sobre el botón. */
+    transform: translateY(-5px); box-shadow: 0 18px 40px rgba(212,160,23,0.5); /* Lo muevo un poco hacia arriba y le aumento la sombra. */
+}
 
-        canvas { border-radius: 18px; background: rgba(0,0,0,0.25); padding: 1.2rem; }
-        .live-time { color: var(--oro-choco); font-weight: 500; }
-        .small-text { opacity: 0.9; font-weight: 500; }
-        .card.bg-dark { background-color: #1a1a1a !important; }
+.live-time { color: var(--oro-choco); font-weight: 500; } /* Le doy color dorado y un grosor medio al texto de la hora. */
+.small-text { opacity: 0.9; font-weight: 500; } /* Hago que los textos pequeños sean un poco transparentes. */
+.card.bg-dark { background-color: #1a1a1a !important; } /* Me aseguro de que las tarjetas con la clase 'bg-dark' tengan un fondo específico. */

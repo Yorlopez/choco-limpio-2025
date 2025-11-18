@@ -1,0 +1,79 @@
+<!DOCTYPE html> <!-- Le digo al navegador que este es un documento HTML5. -->
+<html lang="es" data-theme="dark"> <!-- La etiqueta raíz de mi página, en español y con el tema oscuro por defecto. -->
+<head> <!-- Aquí va toda la información que el navegador necesita pero que no se ve en la página. -->
+    <meta charset="UTF-8"> <!-- Le digo al navegador que use los caracteres estándar para que no haya problemas con las tildes o la 'ñ'. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hago que la página se vea bien en cualquier dispositivo, adaptándose al ancho de la pantalla. -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}"> <!-- Este es el icono principal (favicon) de mi página. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}"> <!-- Un icono de 32x32 píxeles. -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}"> <!-- Un icono más pequeño de 16x16 píxeles. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"> <!-- El icono que se usará si alguien guarda mi web en la pantalla de inicio de un iPhone. -->
+    <meta name="description" content="Plataforma de reciclaje fluvial para un Chocó más limpio y sostenible."> <!-- Una breve descripción de mi página para que aparezca en los resultados de Google. -->
+    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}"> <!-- Un archivo que le da más información a los navegadores sobre mi aplicación web. -->
+    
+    <title>{% block title %}Chocó Limpio{% endblock %}</title> <!-- Defino un bloque para el título, que las otras plantillas pueden rellenar. Si no lo rellenan, dice "Chocó Limpio". -->
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Cargo los estilos de Bootstrap desde un CDN para que todo se vea ordenado. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"> <!-- Cargo la librería de iconos de Bootstrap para poder usar iconitos. -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"> <!-- Cargo las fuentes 'Inter' y 'Playfair Display' desde Google Fonts. -->
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"> <!-- Cargo mi propia hoja de estilos base, que tiene los estilos comunes a toda la web. -->
+    {% block styles %}{% endblock %} <!-- Defino un bloque vacío para que las plantillas hijas puedan añadir sus propios estilos CSS. -->
+</head> <!-- Aquí termina la sección de configuración de la cabeza. -->
+<body> <!-- Aquí empieza todo el contenido visible de mi página. -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm"> <!-- Creo la barra de navegación, que es oscura, se expande en pantallas grandes y se queda fija arriba. -->
+        <div class="container"> <!-- Pongo el contenido de la barra de navegación dentro de un contenedor para que esté centrado. -->
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('dashboard') }}"> <!-- El logo/nombre de la marca, que también es un enlace al dashboard. -->
+                <i class="bi bi-droplet-fill me-2"></i> <!-- Pongo un icono de una gota. -->
+                 Chocó Limpio 2025 <!-- El nombre de mi marca. -->
+            </a> <!-- Cierro el enlace de la marca. -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <!-- El botón "hamburguesa" que aparece en celulares. -->
+                <span class="navbar-toggler-icon"></span> <!-- El icono de tres rayitas para el botón. -->
+            </button> <!-- Cierro el botón hamburguesa. -->
+            <div class="collapse navbar-collapse" id="navbarNav"> <!-- Este es el contenedor del menú que se oculta en celulares. -->
+                <ul class="navbar-nav ms-auto align-items-center"> <!-- Creo una lista de enlaces que se alineará a la derecha. -->
+                    {% if user %} <!-- Reviso si hay un usuario con la sesión iniciada. -->
+                        <li class="nav-item d-none d-lg-block"> <!-- Creo un elemento de la lista que solo se verá en pantallas grandes. -->
+                            <span class="navbar-text me-3"> <!-- Un texto simple dentro de la barra de navegación. -->
+                                ¡Hola, {{ user.nombre.split(' ')[0] }}! <!-- Saludo al usuario usando solo su primer nombre. -->
+                            </span> <!-- Cierro el texto de saludo. -->
+                        </li> <!-- Cierro el elemento de la lista. -->
+                    {% endif %} <!-- Termino la condición del 'if'. -->
+                    {% if user and user.rol == 'admin' %} <!-- Reviso si el usuario existe y si su rol es 'admin'. -->
+                        <li class="nav-item"> <!-- Creo un elemento de la lista para el enlace de admin. -->
+                            <a href="{{ url_for('admin_solicitudes') }}" class="nav-link" title="Panel de Admin"><i class="bi bi-shield-lock"></i> Admin</a> <!-- Un enlace al panel de administrador con un icono de escudo. -->
+                        </li> <!-- Cierro el elemento de la lista. -->
+                    {% endif %} <!-- Termino la condición del 'if'. -->
+                    <li class="nav-item"><span class="nav-link live-time" id="liveTime"></span></li> <!-- Un espacio en la barra donde mi JavaScript pondrá la hora actual. -->
+                    <li class="nav-item"><a href="{{ url_for('perfil') }}" class="nav-link" title="Mi Perfil"><i class="bi bi-person"></i> Perfil</a></li> <!-- Un enlace a la página de perfil del usuario. -->
+                    <li class="nav-item"><a href="{{ url_for('logout') }}" class="nav-link text-danger" title="Salir"><i class="bi bi-box-arrow-right"></i> Salir</a></li> <!-- Un enlace para cerrar sesión, de color rojo. -->
+                </ul> <!-- Cierro la lista de enlaces. -->
+            </div> <!-- Cierro el contenedor del menú. -->
+        </div> <!-- Cierro el contenedor de la barra de navegación. -->
+    </nav> <!-- Cierro la barra de navegación. -->
+
+    <main class="container" style="padding-top: 100px;"> <!-- El contenedor principal del contenido, con un espacio arriba para que no lo tape la barra. -->
+        {% with messages = get_flashed_messages(with_categories=true) %} <!-- Pido a Flask si hay algún mensaje 'flash' (como "¡Éxito!") para mostrar. -->
+            {% if messages %} <!-- Si hay mensajes... -->
+                <div class="flashed-messages mb-4"> <!-- ...creo un contenedor para ellos. -->
+                {% for category, message in messages %} <!-- Recorro cada mensaje que haya. -->
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"> <!-- Muestro una alerta de Bootstrap con el color y el texto del mensaje. -->
+                        {{ message }} <!-- Pongo el texto del mensaje. -->
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> <!-- Añado un botón 'X' para cerrar la alerta. -->
+                    </div> <!-- Cierro la alerta. -->
+                {% endfor %} <!-- Termino el bucle de los mensajes. -->
+                </div> <!-- Cierro el contenedor de mensajes. -->
+            {% endif %} <!-- Termino la condición del 'if'. -->
+        {% endwith %} <!-- Termino el bloque de los mensajes flash. -->
+        {% block content %}{% endblock %} <!-- Defino el bloque principal que cada página hija va a rellenar con su contenido. -->
+    </main> <!-- Cierro el contenedor principal del contenido. -->
+
+    <footer class="container text-center text-white-50 py-4 mt-5"> <!-- Creo el pie de página, centrado y con texto de color gris claro. -->
+        <small>&copy; {{ now().year }} Chocó Limpio. Hecho con orgullo en Quibdó.</small> <!-- Pongo el texto del copyright, usando Jinja2 para obtener el año actual. -->
+    </footer> <!-- Cierro el pie de página. -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> <!-- Cargo el JavaScript de Bootstrap para que funcionen cosas como los menús desplegables. -->
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script> <!-- Cargo mi archivo JavaScript base, que tiene la lógica común (como el reloj). -->
+    {% block scripts %}{% endblock %} <!-- Defino un bloque vacío para que las plantillas hijas puedan añadir sus propios scripts. -->
+</body> <!-- Aquí se termina el contenido visible de la página. -->
+</html> <!-- Y aquí se termina mi archivo HTML. -->

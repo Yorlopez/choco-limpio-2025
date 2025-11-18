@@ -1,10 +1,10 @@
-        :root { --oro-choco: #d4a017; --bg: #0f1a1e; }
-        body { background: linear-gradient(135deg, var(--bg) 0%, #1a2a2a 100%); color: white; min-height: 100vh; display: flex; align-items: center; }
-        .report-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(212,160,23,0.3); border-radius: 24px; padding: 2.5rem; max-width: 500px; margin: auto; }
-        .form-label { color: white !important; font-weight: 600; }
-        .form-control { background: rgba(255,255,255,0.1); border: 1px solid rgba(212,160,23,0.4); color: white; }
-        .form-control::placeholder { color: rgba(255,255,255,0.6); }
-        .btn-premium { background: linear-gradient(45deg, var(--oro-choco), #f1c40f); color: #000; border: none; padding: 0.9rem; border-radius: 50px; font-weight: 600; }
-        .btn-premium:hover { transform: translateY(-3px); }
-        .back-link { color: var(--oro-choco); text-decoration: none; }
-        .back-link:hover { color: #f1c40f; }
+:root { --oro-choco: #d4a017; --bg: #0f1a1e; } /* Defino mis colores principales para esta página. */
+body { background: linear-gradient(135deg, var(--bg) 0%, #1a2a2a 100%); color: white; min-height: 100vh; display: flex; align-items: center; } /* Pongo un fondo degradado, texto blanco y centro verticalmente el contenido. */
+.report-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(212,160,23,0.3); border-radius: 24px; padding: 2.5rem; max-width: 500px; margin: auto; } /* Le doy estilo a la tarjeta del formulario: fondo transparente, borde dorado, esquinas redondeadas y un ancho máximo. */
+.form-label { color: white !important; font-weight: 600; } /* Hago que las etiquetas de los campos sean blancas y en negrita. */
+.form-control { background: rgba(255,255,255,0.1); border: 1px solid rgba(212,160,23,0.4); color: white; } /* Le doy estilo a los campos de texto: fondo transparente, borde dorado y texto blanco. */
+.form-control::placeholder { color: rgba(255,255,255,0.6); } /* Le doy un color blanco semitransparente al texto de ejemplo (placeholder). */
+.btn-premium { background: linear-gradient(45deg, var(--oro-choco), #f1c40f); color: #000; border: none; padding: 0.9rem; border-radius: 50px; font-weight: 600; } /* Le doy estilo al botón de enviar: fondo degradado dorado, texto negro, sin borde y redondeado. */
+.btn-premium:hover { transform: translateY(-3px); } /* Cuando paso el ratón sobre el botón, lo muevo un poquito hacia arriba. */
+.back-link { color: var(--oro-choco); text-decoration: none; } /* Le doy color dorado al enlace de "Volver" y le quito el subrayado. */
+.back-link:hover { color: #f1c40f; } /* Cuando paso el ratón sobre el enlace, le cambio el color a un dorado más brillante. */

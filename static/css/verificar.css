@@ -1,26 +1,26 @@
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #121212;
-            color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .verify-card {
-            background-color: #1e1e1e;
-            padding: 2.5rem;
-            border-radius: 15px;
-            border: 1px solid #333;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-        }
-        .form-control {
-            background-color: #2a2a2a;
-            border-color: #444;
-            color: #fff;
-            text-align: center;
-            font-size: 1.5rem;
-            letter-spacing: 0.5rem;
-        }
+body { /* Le doy estilo a todo el cuerpo de la página. */
+    font-family: 'Inter', sans-serif; /* Establezco la fuente principal. */
+    background-color: #121212; /* Le pongo un color de fondo casi negro. */
+    color: #f0f0f0; /* Establezco el color de texto por defecto a un gris claro. */
+    display: flex; /* Activo el modo 'flexbox' para centrar el contenido fácilmente. */
+    align-items: center; /* Centro el contenido verticalmente. */
+    justify-content: center; /* Centro el contenido horizontalmente. */
+    min-height: 100vh; /* Hago que el cuerpo ocupe al menos toda la altura de la pantalla. */
+}
+.verify-card { /* Le doy estilo a la tarjeta de verificación. */
+    background-color: #1e1e1e; /* Le pongo un fondo gris oscuro. */
+    padding: 2.5rem; /* Le doy un buen espacio interior. */
+    border-radius: 15px; /* Redondeo las esquinas. */
+    border: 1px solid #333; /* Le pongo un borde gris. */
+    max-width: 450px; /* Le pongo un ancho máximo para que no se estire demasiado en pantallas grandes. */
+    width: 100%; /* Hago que ocupe todo el ancho disponible hasta el máximo. */
+    text-align: center; /* Centro todo el texto dentro de la tarjeta. */
+}
+.form-control { /* Le doy estilo al campo donde se escribe el código. */
+    background-color: #2a2a2a; /* Le pongo un fondo gris oscuro. */
+    border-color: #444; /* Le pongo un borde gris. */
+    color: #fff; /* Hago que el texto que se escribe sea blanco. */
+    text-align: center; /* Centro el texto que se escribe. */
+    font-size: 1.5rem; /* Hago la letra más grande. */
+    letter-spacing: 0.5rem; /* Separo las letras para que parezca un código de verificación. */
+}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %} <!-- Le digo a esta plantilla que use 'base.html' como su esqueleto principal. -->
+
+{% block styles %} <!-- Abro un bloque para poner los estilos CSS que solo se usarán en esta página. -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"> <!-- Le pido a Flask que me dé la ruta al archivo 'admin.css' y lo enlazo. -->
+{% endblock %} <!-- Cierro el bloque de los estilos. -->
+
+{% block content %} <!-- Abro el bloque principal donde va a ir todo el contenido de esta página. -->
+<h1 class="mb-4">Solicitudes Pendientes de Lancheros</h1> <!-- Pongo un título grande para la página. -->
+
+<div class="table-responsive"> <!-- Creo un contenedor que hace que la tabla se pueda desplazar de lado en pantallas pequeñas. -->
+    <table class="table table-striped table-hover align-middle"> <!-- Creo la tabla con estilos de Bootstrap para que se vea bien. -->
+        <thead class="table-dark"> <!-- Defino la cabecera de la tabla con un fondo oscuro. -->
+            <tr> <!-- Creo una fila para los títulos de las columnas. -->
+                <th>Nombre</th> <!-- La columna para el nombre del solicitante. -->
+                <th>Contacto</th> <!-- La columna para el email y teléfono. -->
+                <th>Mensaje</th> <!-- La columna para el mensaje que enviaron. -->
+                <th>Foto Lancha</th> <!-- La columna para la foto de su lancha. -->
+                <th>Acciones</th> <!-- La columna para los botones de aprobar/rechazar. -->
+            </tr> <!-- Cierro la fila de los títulos. -->
+        </thead> <!-- Cierro la cabecera de la tabla. -->
+        <tbody> <!-- Abro el cuerpo de la tabla, donde irán los datos de cada solicitud. -->
+            {% for solicitud in solicitudes %} <!-- Uso Jinja2 para empezar un bucle que recorre cada 'solicitud' en la lista que me mandó Python. -->
+                <tr> <!-- Creo una fila para cada solicitud. -->
+                    <td>{{ solicitud.nombre }}</td> <!-- Muestro el nombre que viene en el objeto 'solicitud'. -->
+                    <td> <!-- Abro la celda para la información de contacto. -->
+                        <i class="bi bi-envelope"></i> {{ solicitud.email }}<br> <!-- Pongo un icono de sobre y luego el email, seguido de un salto de línea. -->
+                        <i class="bi bi-phone"></i> {{ solicitud.telefono }} <!-- Pongo un icono de teléfono y luego el número. -->
+                    </td> <!-- Cierro la celda de contacto. -->
+                    <td> <!-- Abro la celda para el mensaje. -->
+                        <div class="mensaje-col" data-bs-toggle="tooltip" title="{{ solicitud.mensaje_lanchero }}"> <!-- Creo un div para el mensaje. Si es muy largo, Bootstrap mostrará el texto completo al pasar el ratón. -->
+                            {{ solicitud.mensaje_lanchero }} <!-- Muestro el mensaje de la solicitud. -->
+                        </div> <!-- Cierro el div del mensaje. -->
+                    </td> <!-- Cierro la celda del mensaje. -->
+                    <td> <!-- Abro la celda para la foto. -->
+                        {% if solicitud.foto_lancha_url %} <!-- Reviso si esta solicitud tiene una URL para la foto de la lancha. -->
+                            <a href="{{ solicitud.foto_lancha_url }}" target="_blank"> <!-- Si la tiene, creo un enlace que abre la foto en una nueva pestaña. -->
+                                <img src="{{ solicitud.foto_lancha_url }}" alt="Foto de la lancha" class="lancha-img"> <!-- Muestro la foto como una imagen pequeña. -->
+                            </a> <!-- Cierro el enlace de la foto. -->
+                        {% else %} <!-- Si no había una URL para la foto... -->
+                            <span class="text-muted fst-italic">No hay foto</span> <!-- ...muestro un texto que dice "No hay foto". -->
+                        {% endif %} <!-- Termino la condición del 'if'. -->
+                    </td> <!-- Cierro la celda de la foto. -->
+                    <td class="text-nowrap"> <!-- Abro la celda para los botones y evito que se partan en dos líneas. -->
+                        <button class="btn btn-success btn-sm" onclick="procesarSolicitud(this, '{{ solicitud.id }}', 'aprobar')">Aprobar</button> <!-- El botón para aprobar, que al hacer clic llama a mi función de JavaScript. -->
+                        <button class="btn btn-danger btn-sm" onclick="procesarSolicitud(this, '{{ solicitud.id }}', 'rechazar')">Rechazar</button> <!-- El botón para rechazar, que llama a la misma función pero con otra acción. -->
+                    </td> <!-- Cierro la celda de los botones. -->
+                </tr> <!-- Cierro la fila de esta solicitud. -->
+                {% else %} <!-- Si el bucle 'for' de arriba no encontró ninguna solicitud para mostrar... -->
+                <tr> <!-- ...creo una única fila. -->
+                    <td colspan="5" class="text-center text-muted py-4">No hay solicitudes pendientes.</td> <!-- Y en esa fila, pongo una celda que ocupa las 5 columnas y dice que no hay nada. -->
+                </tr> <!-- Cierro esta fila de "no hay nada". -->
+                {% endfor %} <!-- Termino el bucle 'for'. -->
+        </tbody> <!-- Cierro el cuerpo de la tabla. -->
+    </table> <!-- Cierro la tabla. -->
+</div> <!-- Cierro el contenedor 'responsive'. -->
+{% endblock %} <!-- Cierro el bloque de contenido principal. -->
+
+{% block scripts %} <!-- Abro un bloque para los scripts de JavaScript de esta página. -->
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script> <!-- Le pido a Flask la ruta de mi archivo 'admin.js' y lo cargo. -->
+{% endblock %} <!-- Cierro el bloque de scripts. -->

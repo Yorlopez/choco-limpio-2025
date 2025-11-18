@@ -1,0 +1,31 @@
+{
+    "name": "Chocó Limpio 2025",
+    "short_name": "Chocó Limpio",
+    "description": "Plataforma para la gestión de reciclaje en el Chocó.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0f1a1e",
+    "theme_color": "#1a5f3d",
+    "icons": [
+        {
+            "src": "/static/img/favicon-16x16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/favicon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
+}

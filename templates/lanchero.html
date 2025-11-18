@@ -1,92 +1,93 @@
-<!DOCTYPE html>
-<html lang="es" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- FAVICONS -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}">
-    <title>Panel del Lanchero | Chocó Limpio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/static/css/lanchero.css">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/lanchero">
-                <i class="bi bi-water"></i> Panel del Lanchero
-            </a>
-            <span class="navbar-text">
-                Reportes Pendientes: <span id="contadorReportes" class="badge bg-warning text-dark">0</span>
-            </span>
-            <a href="/logout" class="btn btn-outline-danger btn-sm"><i class="bi bi-box-arrow-right"></i> Salir</a>
-        </div>
-    </nav>
+<!DOCTYPE html> <!-- Le digo al navegador que este es un documento HTML5. -->
+<html lang="es" data-theme="dark"> <!-- La etiqueta raíz de mi página, en español y con el tema oscuro por defecto. -->
+<head> <!-- Aquí va toda la información que el navegador necesita pero que no se ve en la página. -->
+    <meta charset="UTF-8"> <!-- Le digo al navegador que use los caracteres estándar para que no haya problemas con las tildes o la 'ñ'. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hago que la página se vea bien en cualquier dispositivo, adaptándose al ancho de la pantalla. -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}"> <!-- Este es el icono principal (favicon) de mi página. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}"> <!-- Un icono de 32x32 píxeles. -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}"> <!-- Un icono más pequeño de 16x16 píxeles. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"> <!-- El icono que se usará si alguien guarda mi web en la pantalla de inicio de un iPhone. -->
+    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}"> <!-- Un archivo que le da más información a los navegadores sobre mi aplicación web. -->
+    <title>Panel del Lanchero | Chocó Limpio</title> <!-- Este es el texto que aparece en la pestaña del navegador. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Cargo los estilos de Bootstrap desde un CDN para que todo se vea ordenado. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"> <!-- Cargo la librería de iconos de Bootstrap para poder usar iconitos. -->
+    <link rel="stylesheet" href="/static/css/lanchero.css"> <!-- Cargo mi propia hoja de estilos, donde personalizo la apariencia de esta página. -->
+</head> <!-- Aquí termina la sección de configuración de la cabeza. -->
+<body> <!-- Aquí empieza todo el contenido visible de mi página. -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"> <!-- Creo la barra de navegación, que es oscura, se expande en pantallas grandes y se queda fija arriba. -->
+        <div class="container"> <!-- Pongo el contenido de la barra de navegación dentro de un contenedor para que esté centrado. -->
+            <a class="navbar-brand" href="/lanchero"> <!-- El logo/nombre de la marca, que también es un enlace a esta misma página. -->
+                <i class="bi bi-water"></i> Panel del Lanchero <!-- Pongo un icono de agua y el título del panel. -->
+            </a> <!-- Cierro el enlace de la marca. -->
+            <span class="navbar-text"> <!-- Un texto simple dentro de la barra de navegación. -->
+                Reportes Pendientes: <span id="contadorReportes" class="badge bg-warning text-dark">0</span> <!-- Muestro cuántos reportes hay. El número '0' será actualizado por mi JavaScript. -->
+            </span> <!-- Cierro el texto del contador. -->
+            <a href="/logout" class="btn btn-outline-danger btn-sm"><i class="bi bi-box-arrow-right"></i> Salir</a> <!-- Un botón pequeño y rojo para cerrar sesión. -->
+        </div> <!-- Cierro el contenedor de la barra de navegación. -->
+    </nav> <!-- Cierro la barra de navegación. -->
 
-    <div class="container" style="padding-top: 80px;">
-        <header class="text-center my-4">
-            <h1>Recolecciones Pendientes</h1>
-            <p class="lead">Estos son los reportes que necesitan ser recogidos.</p>
-        </header>
+    <div class="container" style="padding-top: 80px;"> <!-- El contenedor principal del contenido, con un espacio arriba para que no lo tape la barra. -->
+        <header class="text-center my-4"> <!-- El encabezado de la página, centrado y con márgenes. -->
+            <h1>Recolecciones Pendientes</h1> <!-- El título principal. -->
+            <p class="lead">Estos son los reportes que necesitan ser recogidos.</p> <!-- Un subtítulo o descripción. -->
+        </header> <!-- Cierro el encabezado. -->
 
-        <div id="spinner" class="text-center mt-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Buscando reportes...</span>
-            </div>
-            <p>Buscando reportes...</p>
-        </div>
+        <div id="spinner" class="text-center mt-5"> <!-- Este es el ícono de carga que se muestra mientras busco los reportes. -->
+            <div class="spinner-border text-primary" role="status"> <!-- El círculo giratorio de Bootstrap. -->
+                <span class="visually-hidden">Buscando reportes...</span> <!-- Un texto que solo leen los lectores de pantalla, para accesibilidad. -->
+            </div> <!-- Cierro el círculo. -->
+            <p>Buscando reportes...</p> <!-- Un texto visible que dice que se está cargando. -->
+        </div> <!-- Cierro el contenedor del ícono de carga. -->
 
-        <div id="no-reportes" class="alert alert-success text-center" style="display: none;">
-            <i class="bi bi-check-circle-fill fs-3"></i>
-            <h4 class="alert-heading">¡Todo al día!</h4>
-            <p>No hay reportes pendientes por recoger.</p>
-        </div>
+        <div id="no-reportes" class="alert alert-success text-center" style="display: none;"> <!-- Este mensaje de "todo al día" está oculto por defecto. -->
+            <i class="bi bi-check-circle-fill fs-3"></i> <!-- Un icono grande de un check. -->
+            <h4 class="alert-heading">¡Todo al día!</h4> <!-- El título de la alerta. -->
+            <p>No hay reportes pendientes por recoger.</p> <!-- El texto de la alerta. -->
+        </div> <!-- Cierro la alerta. -->
 
-        <div id="lista-reportes" class="row g-4">
-            <!-- Las tarjetas de reporte se insertarán aquí dinámicamente -->
-        </div>
-    </div>
+        <div id="lista-reportes" class="row g-4"> <!-- El contenedor donde mi JavaScript va a poner todas las tarjetas de los reportes, organizadas en filas y columnas. -->
+        </div> <!-- Cierro el contenedor de la lista. -->
+    </div> <!-- Cierro el contenedor principal de la página. -->
 
-    <!-- Plantilla para las tarjetas de reporte -->
-    <template id="reporte-template">
-        <div class="col-md-6 col-lg-4">
-            <div class="card reporte-card">
-                <img src="" class="card-img-top reporte-imagen" alt="Foto del reciclaje">
-                <div class="card-body">
-                    <h5 class="card-title"><span class="fw-bold reporte-kg"></span> kg</h5>
-                    <p class="card-text reporte-ubicacion"></p>
-                    <div class="card-footer bg-transparent border-top-0">
-                        <small class="text-white-50">
-                            <i class="bi bi-person-circle"></i> <span class="reporte-usuario"></span><br>
-                            <i class="bi bi-geo-alt-fill"></i> <span class="reporte-barrio"></span>
-                        </small>
-                        <button class="btn btn-success w-100 mt-3 btn-recoger">
-                            <i class="bi bi-check-lg"></i> Marcar como Recogido
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
+    <template id="reporte-template"> <!-- Esta es una plantilla invisible. La uso como un molde para crear cada tarjeta de reporte con JavaScript. -->
+        <div class="col-md-6 col-lg-4"> <!-- Defino cómo se va a ver la columna que contiene la tarjeta en diferentes tamaños de pantalla. -->
+            <div class="card reporte-card"> <!-- La tarjeta en sí, con estilos personalizados. -->
+                <img src=""  <!-- La etiqueta de la imagen. La URL la pondrá mi JavaScript. -->
+                     class="card-img-top reporte-imagen" <!-- Clases de Bootstrap y mías para darle estilo a la imagen. -->
+                     alt="Foto del reciclaje" <!-- Un texto alternativo para la imagen. -->
+                     style="cursor: pointer;" <!-- Hago que el cursor se convierta en una manito al pasar sobre la imagen. -->
+                     data-bs-toggle="modal" data-bs-target="#imageModal"> <!-- Le digo a Bootstrap que al hacer clic, abra la ventana emergente con id 'imageModal'. -->
+                <div class="card-body"> <!-- El cuerpo de la tarjeta, donde va el texto. -->
+                    <h5 class="card-title"><span class="fw-bold reporte-kg"></span> kg</h5> <!-- El título, que mostrará los kilos del reporte. -->
+                    <p class="card-text reporte-ubicacion"></p> <!-- Un párrafo para la descripción de la ubicación. -->
+                    <div class="card-footer bg-transparent border-top-0"> <!-- Un pie de tarjeta transparente para la información del usuario. -->
+                        <small class="text-white-50"> <!-- Un texto pequeño y de color gris claro. -->
+                            <i class="bi bi-person-circle"></i> <span class="reporte-usuario"></span><br> <!-- Muestro el nombre del usuario con un icono. -->
+                            <i class="bi bi-geo-alt-fill"></i> <span class="reporte-barrio"></span> <!-- Muestro el barrio del usuario con otro icono. -->
+                        </small> <!-- Cierro el texto pequeño. -->
+                        <button class="btn btn-success w-100 mt-3 btn-recoger"> <!-- El botón para que el lanchero marque el reporte como recogido. -->
+                            <i class="bi bi-check-lg"></i> Marcar como Recogido <!-- El texto del botón con un icono de check. -->
+                        </button> <!-- Cierro el botón. -->
+                    </div> <!-- Cierro el pie de la tarjeta. -->
+                </div> <!-- Cierro el cuerpo de la tarjeta. -->
+            </div> <!-- Cierro la tarjeta. -->
+        </div> <!-- Cierro la columna. -->
+    </template> <!-- Cierro la plantilla. -->
 
-    <script src="/static/js/lanchero.js"></script>
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true"> <!-- El contenedor de la ventana emergente para ver la imagen en grande. -->
+        <div class="modal-dialog modal-lg modal-dialog-centered"> <!-- El cuadro de diálogo, grande y centrado. -->
+            <div class="modal-content bg-dark border-secondary"> <!-- El contenido de la ventana, con fondo oscuro. -->
+                <div class="modal-header border-0"> <!-- La cabecera de la ventana, sin borde. -->
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> <!-- El botón 'X' para cerrar la ventana. -->
+                </div> <!-- Cierro la cabecera. -->
+                <div class="modal-body text-center p-2"> <!-- El cuerpo de la ventana, centrado y con poco espacio interior. -->
+                    <img src="" id="modalImage" class="img-fluid rounded" alt="Imagen del reporte ampliada"> <!-- La imagen que se va a mostrar. Mi JavaScript le pondrá la URL correcta. -->
+                </div> <!-- Cierro el cuerpo. -->
+            </div> <!-- Cierro el contenido. -->
+        </div> <!-- Cierro el cuadro de diálogo. -->
+    </div> <!-- Cierro la ventana emergente. -->
 
-    <!-- MODAL PARA VER IMAGEN AMPLIADA -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content bg-dark border-secondary">
-                <div class="modal-header border-0">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center p-2">
-                    <img src="" id="modalImage" class="img-fluid rounded" alt="Imagen del reporte ampliada">
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> <!-- Cargo el JavaScript de Bootstrap para que funcionen cosas como los modales. -->
+    <script src="/static/js/lanchero.js"></script> <!-- Cargo mi script que controla toda la lógica de esta página. -->
+</body> <!-- Aquí se termina el contenido visible de la página. -->
+</html> <!-- Y aquí se termina mi archivo HTML. -->

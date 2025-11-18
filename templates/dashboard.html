@@ -1,126 +1,135 @@
-<!DOCTYPE html>
-<html lang="es" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- FAVICONS -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}">
-    <title>Dashboard | Chocó Limpio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/dashboard.css">
-</head>
-<body>
+<!DOCTYPE html> <!-- Le digo al navegador que este es un documento HTML5. -->
+<html lang="es" data-theme="dark"> <!-- La etiqueta raíz de mi página, en español y con el tema oscuro por defecto. -->
+<head> <!-- Aquí va toda la información que el navegador necesita pero que no se ve en la página. -->
+    <meta charset="UTF-8"> <!-- Le digo al navegador que use los caracteres estándar para que no haya problemas con las tildes o la 'ñ'. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hago que la página se vea bien en cualquier dispositivo, adaptándose al ancho de la pantalla. -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}"> <!-- Este es el icono principal (favicon) de mi página. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}"> <!-- Un icono de 32x32 píxeles. -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}"> <!-- Un icono más pequeño de 16x16 píxeles. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"> <!-- El icono que se usará si alguien guarda mi web en la pantalla de inicio de un iPhone. -->
+    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}"> <!-- Un archivo que le da más información a los navegadores sobre mi aplicación web. -->
+    <title>Dashboard | Chocó Limpio</title> <!-- Este es el texto que aparece en la pestaña del navegador. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Cargo los estilos de Bootstrap desde un CDN para que todo se vea ordenado. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"> <!-- Cargo la librería de iconos de Bootstrap para poder usar iconitos. -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"> <!-- Cargo las fuentes 'Inter' y 'Playfair Display' desde Google Fonts. -->
+    <link rel="stylesheet" href="/static/css/dashboard.css"> <!-- Cargo mi propia hoja de estilos, donde personalizo la apariencia de esta página. -->
+</head> <!-- Aquí termina la sección de configuración de la cabeza. -->
+<body> <!-- Aquí empieza todo el contenido visible de mi página. -->
+{% extends 'base.html' %} <!-- Le digo a esta plantilla que use 'base.html' como su esqueleto principal. -->
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dashboard fixed-top">
-        <div class="container">
-            <a class="navbar-brand text-white d-flex align-items-center" href="/dashboard">
-                <i class="bi bi-droplet-fill me-2"></i> Chocó Limpio 2025
-            </a>
-            <div class="d-flex align-items-center gap-3">
-                <span class="text-white me-2">¡Hola, <strong id="userName">{{ user.nombre.split(' ')[0] }}!</strong></span>
-                <span class="live-time" id="liveTime"></span>
-                <a href="/perfil" class="btn btn-outline-light btn-sm"><i class="bi bi-person"></i></a>
-                <a href="/logout" class="btn btn-outline-danger btn-sm"><i class="bi bi-box-arrow-right"></i></a>
-            </div>
-        </div>
-    </nav>
+    <nav class="navbar navbar-expand-lg navbar-dashboard fixed-top"> <!-- Creo la barra de navegación, que es oscura, se expande en pantallas grandes y se queda fija arriba. -->
+        <div class="container"> <!-- Pongo el contenido de la barra de navegación dentro de un contenedor para que esté centrado. -->
+            <a class="navbar-brand text-white d-flex align-items-center" href="/dashboard"> <!-- El logo/nombre de la marca, que también es un enlace al dashboard. -->
+                <i class="bi bi-droplet-fill me-2"></i> Chocó Limpio 2025 <!-- Pongo un icono de una gota y el nombre de mi marca. -->
+            </a> <!-- Cierro el enlace de la marca. -->
+            <div class="d-flex align-items-center gap-3"> <!-- Creo un contenedor flexible para alinear los elementos de la derecha. -->
+                <span class="text-white me-2">¡Hola, <strong id="userName">{{ user.nombre.split(' ')[0] }}!</strong></span> <!-- Saludo al usuario usando solo su primer nombre. El ID 'userName' lo uso para actualizarlo con JavaScript. -->
+                <span class="live-time" id="liveTime"></span> <!-- Un espacio en la barra donde mi JavaScript pondrá la hora actual. -->
+                <a href="/perfil" class="btn btn-outline-light btn-sm"><i class="bi bi-person"></i></a> <!-- Un botón pequeño que lleva a la página de perfil. -->
+                <a href="/logout" class="btn btn-outline-danger btn-sm"><i class="bi bi-box-arrow-right"></i></a> <!-- Un botón pequeño y rojo para cerrar sesión. -->
+            </div> <!-- Cierro el contenedor de la derecha. -->
+        </div> <!-- Cierro el contenedor de la barra de navegación. -->
+    </nav> <!-- Cierro la barra de navegación. -->
+{% block title %}Dashboard | Chocó Limpio{% endblock %} <!-- Relleno el bloque 'title' de la plantilla base con el título específico de esta página. -->
 
-    <div class="container" style="padding-top: 110px;">
+    <div class="container" style="padding-top: 110px;"> <!-- El contenedor principal del contenido, con un espacio arriba para que no lo tape la barra. -->
+{% block styles %} <!-- Abro un bloque para poner los estilos CSS que solo se usarán en esta página. -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> <!-- Cargo la librería AOS para las animaciones al hacer scroll. -->
+    <link rel="stylesheet" href="/static/css/dashboard.css"> <!-- Cargo la hoja de estilos específica para el dashboard. -->
+{% endblock %} <!-- Cierro el bloque de los estilos. -->
 
-        <!-- HERO STATS -->
-        <div class="row g-4 mb-5" data-aos="fade-up">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="bi bi-recycle"></i></div>
-                    <h3 class="display-4 fw-bold text-warning" id="kgTotal">{{ user.kg_reciclados|round(2) }} kg</h3>
-                    <p class="lead mb-0">Reciclados</p>
-                    <div class="progress-river mt-3"></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="bi bi-phone-vibrate"></i></div>
-                    <h3 class="display-4 fw-bold text-success" id="minutosTotal">{{ user.minutos }}</h3>
-                    <p class="lead mb-0">Minutos Ganados</p>
-                    <small class="small-text" style="color: var(--minutos-text);">1 kg = 15 min</small>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-icon impact-tree"></div>
-                    <h3 class="display-4 fw-bold text-info" id="arbolesTotal">{{ user.kg_reciclados|int }}</h3>
-                    <p class="lead mb-0">Árboles Plantados</p>
-                    <small class="small-text" style="color: var(--arboles-text);">1 kg = 1 árbol en el Atrato</small>
-                </div>
-            </div>
-        </div>
+{% block content %} <!-- Abro el bloque principal donde va a ir todo el contenido de esta página. -->
+    <div class="d-flex justify-content-between align-items-center mb-4"> <!-- Un contenedor para alinear el título a la izquierda y la hora a la derecha. -->
+        <h1 class="mb-0">Tu Impacto</h1> <!-- El título principal de la sección. -->
+        <span class="live-time" id="liveTime"></span> <!-- Otro espacio para la hora, por si lo quiero mostrar aquí también. -->
+    </div> <!-- Cierro el contenedor del encabezado. -->
+        <div class="row g-4 mb-5" data-aos="fade-up"> <!-- Una fila para las tarjetas de estadísticas. La animación hará que aparezcan desde abajo. -->
+            <div class="col-md-4"> <!-- La primera columna, que ocupará 4 de 12 espacios en pantallas medianas o más grandes. -->
+                <div class="stat-card"> <!-- La tarjeta para una estadística. -->
+                    <div class="stat-icon"><i class="bi bi-recycle"></i></div> <!-- El icono de reciclaje para esta tarjeta. -->
+                    <h3 class="display-4 fw-bold text-warning" id="kgTotal">{{ user.kg_reciclados|round(2) }} kg</h3> <!-- Muestro los kilos reciclados, redondeados a 2 decimales. El ID lo uso para actualizarlo con JS. -->
+                    <p class="lead mb-0">Reciclados</p> <!-- El texto debajo del número. -->
+                    <div class="progress-river mt-3"></div> <!-- Una barrita de progreso con animación de río. -->
+                </div> <!-- Cierro la tarjeta. -->
+            </div> <!-- Cierro la columna. -->
+            <div class="col-md-4"> <!-- La segunda columna para la tarjeta de minutos. -->
+                <div class="stat-card"> <!-- La tarjeta para los minutos ganados. -->
+                    <div class="stat-icon"><i class="bi bi-phone-vibrate"></i></div> <!-- El icono de un teléfono vibrando. -->
+                    <h3 class="display-4 fw-bold text-success" id="minutosTotal">{{ user.minutos }}</h3> <!-- Muestro los minutos que ha ganado el usuario. -->
+                    <p class="lead mb-0">Minutos Ganados</p> <!-- El texto debajo del número. -->
+                    <small class="small-text" style="color: var(--minutos-text);">1 kg = 15 min</small> <!-- Un texto pequeño que explica la conversión. -->
+                </div> <!-- Cierro la tarjeta. -->
+            </div> <!-- Cierro la columna. -->
+            <div class="col-md-4"> <!-- La tercera columna para la tarjeta de árboles. -->
+                <div class="stat-card"> <!-- La tarjeta para los árboles plantados. -->
+                    <div class="stat-icon impact-tree"></div> <!-- Un icono personalizado de un árbol. -->
+                    <h3 class="display-4 fw-bold text-info" id="arbolesTotal">{{ user.kg_reciclados|int }}</h3> <!-- Muestro el número de árboles, que es la parte entera de los kilos. -->
+                    <p class="lead mb-0">Árboles Plantados</p> <!-- El texto debajo del número. -->
+                    <small class="small-text" style="color: var(--arboles-text);">1 kg = 1 árbol en el Atrato</small> <!-- Un texto pequeño que explica el impacto. -->
+                </div> <!-- Cierro la tarjeta. -->
+            </div> <!-- Cierro la columna. -->
+        </div> <!-- Cierro la fila de las tarjetas. -->
 
-        <!-- GRÁFICO + TOP 3 -->
-        <div class="row mb-5">
-            <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
-                <div class="card bg-dark text-white border-0 shadow-lg" style="border-radius: 20px;">
-                    <div class="card-body p-4">
-                        <h4 class="mb-4">Progreso Semanal (Confirmado)</h4>
-                        <!-- Envolvemos el canvas en un div con altura fija para evitar que crezca -->
-                        <div style="position: relative; height: 250px;">
-                            <canvas id="progressChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="card bg-dark text-white border-0 shadow-lg h-100" style="border-radius: 20px;">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h4 class="mb-3">Top 3</h4>
-                        <!-- El ranking ahora se renderiza con JavaScript -->
-                        <div id="ranking-list" class="list-group list-group-flush flex-grow-1">
-                        </div>
-                        <hr class="border-secondary">
-                        <div class="text-center">
-                            <div class="ranking-badge d-inline-flex mb-2" style="background: var(--oro-choco); width: 50px; height: 50px; font-size: 1.4rem;">
-                                {{ (user.kg_reciclados * 10)|int }}
-                            </div>
-                            <p class="mb-0"><strong>TÚ:</strong> {{ user.kg_reciclados|round(1) }} kg</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="row mb-5"> <!-- Una nueva fila para la gráfica y el ranking. -->
+            <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100"> <!-- La columna de la izquierda, más ancha, para la gráfica. -->
+                <div class="card bg-dark text-white border-0 shadow-lg" style="border-radius: 20px;"> <!-- Una tarjeta oscura y redondeada para la gráfica. -->
+                    <div class="card-body p-4"> <!-- El cuerpo de la tarjeta con algo de espacio interior. -->
+                        <h4 class="mb-4">Progreso Semanal (Confirmado)</h4> <!-- El título de la gráfica. -->
+                        <div style="position: relative; height: 250px;"> <!-- Un contenedor para el lienzo de la gráfica, con una altura fija. -->
+                            <canvas id="progressChart"></canvas> <!-- El elemento 'canvas' donde mi JavaScript dibujará la gráfica. -->
+                        </div> <!-- Cierro el contenedor del lienzo. -->
+                    </div> <!-- Cierro el cuerpo de la tarjeta. -->
+                </div> <!-- Cierro la tarjeta de la gráfica. -->
+            </div> <!-- Cierro la columna de la gráfica. -->
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200"> <!-- La columna de la derecha, más estrecha, para el ranking. -->
+                <div class="card bg-dark text-white border-0 shadow-lg h-100" style="border-radius: 20px;"> <!-- Una tarjeta oscura que ocupa toda la altura disponible. -->
+                    <div class="card-body p-4 d-flex flex-column"> <!-- El cuerpo de la tarjeta, configurado para que su contenido se pueda estirar. -->
+                        <h4 class="mb-3">Top 3</h4> <!-- El título del ranking. -->
+                        <div id="ranking-list" class="list-group list-group-flush flex-grow-1"> <!-- El contenedor donde mi JavaScript pondrá la lista de los mejores usuarios. -->
+                        </div> <!-- Cierro el contenedor del ranking. -->
+                        <hr class="border-secondary"> <!-- Una línea horizontal para separar. -->
+                        <div class="text-center"> <!-- Un contenedor para centrar la información del usuario actual. -->
+                            <div class="ranking-badge d-inline-flex mb-2" style="background: var(--oro-choco); width: 50px; height: 50px; font-size: 1.4rem;"> <!-- Una insignia redonda y dorada. -->
+                                {{ (user.kg_reciclados * 10)|int }} <!-- Muestro un puntaje calculado a partir de los kilos del usuario. -->
+                            </div> <!-- Cierro la insignia. -->
+                            <p class="mb-0"><strong>TÚ:</strong> {{ user.kg_reciclados|round(1) }} kg</p> <!-- Muestro los kilos del usuario actual, redondeados a 1 decimal. -->
+                        </div> <!-- Cierro el contenedor del usuario actual. -->
+                    </div> <!-- Cierro el cuerpo de la tarjeta. -->
+                </div> <!-- Cierro la tarjeta del ranking. -->
+            </div> <!-- Cierro la columna del ranking. -->
+        </div> <!-- Cierro la fila de la gráfica y el ranking. -->
 
-        <div class="row mb-5">
-            <div class="col-12 text-center" data-aos="zoom-in">
-                <h3 class="mb-4">Acciones Rápidas</h3>
-                <div class="d-flex justify-content-center gap-3 flex-wrap">
-                    <a href="/reportar" class="btn btn-premium btn-lg">Reportar</a>
-                    <a href="/mapa" class="btn btn-outline-light btn-lg">Mapa</a>
-                    <a href="https://wa.me/573124567890" class="btn btn-success btn-lg">Llamar Lancha</a>
-                </div>
-            </div>
-        </div>
+        <div class="row mb-5"> <!-- Una nueva fila para los botones de acción. -->
+            <div class="col-12 text-center" data-aos="zoom-in"> <!-- Una columna que ocupa todo el ancho, centrada y con animación de zoom. -->
+                <h3 class="mb-4">Acciones Rápidas</h3> <!-- El título de esta sección. -->
+                <div class="d-flex justify-content-center gap-3 flex-wrap"> <!-- Un contenedor para alinear los botones en el centro. -->
+                    <a href="/reportar" class="btn btn-premium btn-lg">Reportar</a> <!-- Un botón grande y premium que lleva a la página de reportar. -->
+                    <a href="/mapa" class="btn btn-outline-light btn-lg">Mapa</a> <!-- Un botón grande que lleva a la página del mapa. -->
+                    <a href="https://wa.me/573124567890" class="btn btn-success btn-lg">Llamar Lancha</a> <!-- Un botón grande y verde que abre WhatsApp para llamar a la lancha. -->
+                </div> <!-- Cierro el contenedor de los botones. -->
+            </div> <!-- Cierro la columna. -->
+        </div> <!-- Cierro la fila de acciones. -->
 
-        <div class="text-center py-5" data-aos="fade-up">
-            <h2 class="display-5 mb-4">Tu impacto en el río Atrato</h2>
-            <p class="lead fs-4">Has evitado que <strong class="text-warning" id="co2Evitado">{{ (user.kg_reciclados * 2.5)|round(1) }} kg de CO₂</strong> lleguen al ambiente.</p>
-            <div class="d-flex justify-content-center gap-4 flex-wrap mt-4">
-                <div class="p-4 bg-success rounded-4 text-white shadow-sm" style="min-width: 140px;"><strong>Río limpio</strong></div>
-                <div class="p-4 bg-info rounded-4 text-white shadow-sm" style="min-width: 140px;"><strong>Fauna protegida</strong></div>
-                <div class="p-4 bg-warning rounded-4 text-dark shadow-sm" style="min-width: 140px;"><strong>Comunidad unida</strong></div>
-            </div>
-        </div>
+        <div class="text-center py-5" data-aos="fade-up"> <!-- Una sección final, centrada y con animación. -->
+            <h2 class="display-5 mb-4">Tu impacto en el río Atrato</h2> <!-- Un título grande para el impacto ambiental. -->
+            <p class="lead fs-4">Has evitado que <strong class="text-warning" id="co2Evitado">{{ (user.kg_reciclados * 2.5)|round(1) }} kg de CO₂</strong> lleguen al ambiente.</p> <!-- Muestro el CO2 evitado, calculado a partir de los kilos. -->
+            <div class="d-flex justify-content-center gap-4 flex-wrap mt-4"> <!-- Un contenedor para las insignias de impacto. -->
+                <div class="p-4 bg-success rounded-4 text-white shadow-sm" style="min-width: 140px;"><strong>Río limpio</strong></div> <!-- Insignia de "Río limpio". -->
+                <div class="p-4 bg-info rounded-4 text-white shadow-sm" style="min-width: 140px;"><strong>Fauna protegida</strong></div> <!-- Insignia de "Fauna protegida". -->
+                <div class="p-4 bg-warning rounded-4 text-dark shadow-sm" style="min-width: 140px;"><strong>Comunidad unida</strong></div> <!-- Insignia de "Comunidad unida". -->
+            </div> <!-- Cierro el contenedor de insignias. -->
+        </div> <!-- Cierro la sección de impacto. -->
+{% endblock %} <!-- Cierro el bloque de contenido principal. -->
 
-    </div>
+    </div> <!-- Cierro el contenedor principal de la página. -->
 
-    <!-- SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/static/js/dashboard.js"></script>
-</body>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> <!-- Cargo el JavaScript de Bootstrap para que funcionen cosas como los menús desplegables. -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <!-- Cargo la librería de Supabase para poder conectarme a las actualizaciones en tiempo real. -->
+{% block scripts %} <!-- Abro el bloque de scripts que se insertará en 'base.html'. -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> <!-- Cargo el script de la librería de animaciones AOS. -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Cargo la librería Chart.js para poder dibujar la gráfica. -->
+
+    <script src="/static/js/dashboard.js"></script> <!-- Cargo mi script específico para el dashboard, que controla toda la lógica de esta página. -->
+</body> <!-- Aquí se termina el contenido visible de la página. -->
+</html> <!-- Y aquí se termina mi archivo HTML. -->
+{% endblock %} <!-- Cierro el bloque de scripts. -->

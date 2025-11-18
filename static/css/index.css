@@ -1,133 +1,122 @@
- :root {
-            --verde-rio: #1a5f3d; --azul-pacifico: #0a3d62; --oro-choco: #d4a017; --blanco-perla: #f8f9fa; --gris-suave: #e9ecef; --texto: #2d3436; --bg-body: #f8f9fa; --card-bg: white;
-        }
-        [data-theme="dark"] { --verde-rio: #2d6a4f; --azul-pacifico: #1e3a5f; --oro-choco: #f4c430; --blanco-perla: #1a1a1a; --gris-suave: #2d2d2d; --texto: #e0e0e0; --bg-body: #0f1a1e; --card-bg: #1a2a2a; }
-        * { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; letter-spacing: -0.5px; }
-        body { background: linear-gradient(135deg, var(--bg-body) 0%, color-mix(in srgb, var(--bg-body) 90%, #000) 100%); color: var(--texto); transition: all 0.4s ease; overflow-x: hidden; }
-
-        /* NAVBAR FIJO */
-        .navbar {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 1030;
-            backdrop-filter: blur(12px); background: rgba(26,95,61,0.15) !important;
-            border-bottom: 1px solid rgba(255,255,255,0.2); padding: 1rem 0; transition: all 0.4s ease;
-        }
-        .navbar.scrolled { background: rgba(26,95,61,0.95) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.1); padding: 0.75rem 0; }
-        .navbar-brand { font-weight: 700; font-size: 1.8rem; color: white !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .nav-link { color: white !important; font-weight: 500; padding: 0.5rem 1rem !important; border-radius: 50px; transition: all 0.3s ease; }
-        .nav-link:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
-
-        /* HERO */
-        .hero { min-height: 100vh; padding-top: 100px; position: relative; overflow: hidden; color: white; }
-        #heroVideo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
-        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(26,95,61,0.8), rgba(10,61,98,0.7)); z-index: -1; }
-
-        /* SECCIONES FULLSCREEN */
-        #servicios, #como, #contacto { min-height: 100vh; padding: 140px 0; display: flex; align-items: center; }
-        #servicios { background: linear-gradient(135deg, rgba(26,95,61,0.05), transparent); }
-        #como { background: linear-gradient(135deg, rgba(10,61,98,0.05), transparent); }
-        #contacto { background: linear-gradient(135deg, var(--azul-pacifico), var(--verde-rio)); color: white; }
-
-        .btn-premium { background: linear-gradient(45deg, var(--oro-choco), #f1c40f); color: white; border: none; padding: 14px 36px; border-radius: 50px; font-weight: 600; box-shadow: 0 8px 25px rgba(212,160,23,0.3); transition: all 0.4s ease; }
-        [data-theme="dark"] .btn-premium { background: linear-gradient(45deg, #f4c430, #e67e22); }
-        .btn-premium:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(212,160,23,0.4); }
-
-        .card-premium { background: var(--card-bg); border: none; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: all 0.4s ease; }
-        .card-premium::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--verde-rio), var(--oro-choco)); }
-        .card-premium:hover { transform: translateY(-15px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
-        .card-premium .icon { width: 80px; height: 80px; background: linear-gradient(135deg, var(--verde-rio), var(--azul-pacifico)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 2rem; box-shadow: 0 8px 20px rgba(26,95,61,0.3); }
-
-        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 0; }
-
-        .timeline { position: relative; }
-        .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: var(--oro-choco); transform: translateX(-50%); }
-        .timeline-item { margin: 50px 0; position: relative; }
-        .timeline-item:nth-child(odd) .timeline-content { text-align: right; padding-right: 60px; }
-        .timeline-item:nth-child(even) .timeline-content { text-align: left; padding-left: 60px; }
-        .timeline-icon { width: 60px; height: 60px; background: var(--oro-choco); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.8rem; z-index: 1; }
-
-        #map { height: 400px; border-radius: 20px; }
-
-        #themeToggle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-
-/* Solución para campos de formulario en tema oscuro */
-[data-theme="dark"] .modal .form-control {
-    background-color: #2a2a2a;
-    color: #fff;
-    border-color: #444;
+:root { /* Aquí defino mis colores para el tema claro (por defecto). */
+    --verde-rio: #1a5f3d; --azul-pacifico: #0a3d62; --oro-choco: #d4a017; --blanco-perla: #f8f9fa; --gris-suave: #e9ecef; --texto: #2d3436; --bg-body: #f8f9fa; --card-bg: white; /* Defino cada variable de color con un nombre fácil de recordar. */
 }
-[data-theme="dark"] .modal .form-control::placeholder {
-    color: #6c757d;
+[data-theme="dark"] { --verde-rio: #2d6a4f; --azul-pacifico: #1e3a5f; --oro-choco: #f4c430; --blanco-perla: #1a1a1a; --gris-suave: #2d2d2d; --texto: #e0e0e0; --bg-body: #0f1a1e; --card-bg: #1a2a2a; } /* Cuando el HTML tenga el atributo data-theme="dark", cambio los valores de mis colores a tonos oscuros. */
+* { font-family: 'Inter', sans-serif; scroll-behavior: smooth; } /* Le digo que todos los elementos usen la fuente 'Inter' y que el scroll entre secciones sea suave. */
+h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; letter-spacing: -0.5px; } /* Pero para los títulos, uso la fuente 'Playfair Display' y junto un poquito las letras. */
+body { background: linear-gradient(135deg, var(--bg-body) 0%, color-mix(in srgb, var(--bg-body) 90%, #000) 100%); color: var(--texto); transition: all 0.4s ease; overflow-x: hidden; } /* Pongo un fondo degradado, establezco el color de texto y hago que los cambios de color sean suaves. */
+
+.navbar { /* Le doy estilo a la barra de navegación. */
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 1030; /* La dejo fija en la parte de arriba de la pantalla y por encima de casi todo. */
+    backdrop-filter: blur(12px); background: rgba(26,95,61,0.15) !important; /* Le pongo un fondo verde muy transparente con un efecto de desenfoque. */
+    border-bottom: 1px solid rgba(255,255,255,0.2); padding: 1rem 0; transition: all 0.4s ease; /* Le pongo un borde abajo, espaciado y una transición suave. */
 }
-[data-theme="dark"] .modal .form-label {
-    color: #e0e0e0; /* Un color claro para las etiquetas */
+.navbar.scrolled { background: rgba(26,95,61,0.95) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.1); padding: 0.75rem 0; } /* Cuando la barra tiene la clase 'scrolled', le cambio el fondo a uno más opaco, le pongo sombra y la hago un poco más delgada. */
+.navbar-brand { font-weight: 700; font-size: 1.8rem; color: white !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); } /* Le doy estilo al logo/nombre de la marca: negrita, grande, blanco y con una pequeña sombra. */
+.nav-link { color: white !important; font-weight: 500; padding: 0.5rem 1rem !important; border-radius: 50px; transition: all 0.3s ease; } /* Le doy estilo a los enlaces del menú: blancos, con un grosor medio, espaciado, redondeados y con transición suave. */
+.nav-link:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); } /* Cuando paso el ratón sobre un enlace, le pongo un fondo blanco transparente y lo muevo un poquito hacia arriba. */
+
+.hero { min-height: 100vh; padding-top: 100px; position: relative; overflow: hidden; color: white; } /* Le doy estilo a la sección principal: que ocupe toda la pantalla, con espacio arriba, y la preparo para ponerle un fondo. */
+#heroVideo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; } /* Posiciono el video para que ocupe todo el fondo de la sección 'hero'. */
+.hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(26,95,61,0.8), rgba(10,61,98,0.7)); z-index: -1; } /* Pongo una capa de color degradado semitransparente encima del video para que el texto se lea mejor. */
+
+#servicios, #como, #contacto { min-height: 100vh; padding: 140px 0; display: flex; align-items: center; } /* Le doy un estilo común a las secciones principales: que ocupen toda la pantalla y centren su contenido verticalmente. */
+#servicios { background: linear-gradient(135deg, rgba(26,95,61,0.05), transparent); } /* A la sección de servicios le pongo un fondo degradado verde muy sutil. */
+#como { background: linear-gradient(135deg, rgba(10,61,98,0.05), transparent); } /* A la sección 'cómo funciona' le pongo un fondo degradado azul muy sutil. */
+#contacto { background: linear-gradient(135deg, var(--azul-pacifico), var(--verde-rio)); color: white; } /* A la sección de contacto le pongo un fondo degradado sólido y texto blanco. */
+
+.btn-premium { background: linear-gradient(45deg, var(--oro-choco), #f1c40f); color: white; border: none; padding: 14px 36px; border-radius: 50px; font-weight: 600; box-shadow: 0 8px 25px rgba(212,160,23,0.3); transition: all 0.4s ease; } /* Le doy estilo a mi botón 'premium': fondo degradado dorado, texto blanco, sin borde, redondeado, con sombra y transición suave. */
+[data-theme="dark"] .btn-premium { background: linear-gradient(45deg, #f4c430, #e67e22); } /* En el tema oscuro, cambio un poco el degradado del botón. */
+.btn-premium:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(212,160,23,0.4); } /* Cuando paso el ratón sobre el botón, lo muevo hacia arriba y le aumento la sombra. */
+
+.card-premium { background: var(--card-bg); border: none; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: all 0.4s ease; } /* Le doy estilo a las tarjetas de servicios: fondo, sin borde, redondeadas, con sombra y transición. */
+.card-premium::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--verde-rio), var(--oro-choco)); } /* Le pongo una barrita de color decorativa arriba de cada tarjeta. */
+.card-premium:hover { transform: translateY(-15px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.15); } /* Cuando paso el ratón sobre la tarjeta, la levanto y la agrando un poco, y le aumento la sombra. */
+.card-premium .icon { width: 80px; height: 80px; background: linear-gradient(135deg, var(--verde-rio), var(--azul-pacifico)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 2rem; box-shadow: 0 8px 20px rgba(26,95,61,0.3); } /* Le doy estilo al círculo del icono dentro de la tarjeta: tamaño, fondo, redondez, centrado, color y sombra. */
+
+#particles-js { position: absolute; width: 100%; height: 100%; z-index: 0; } /* Posiciono el contenedor de las partículas para que ocupe todo el fondo de su sección padre. */
+
+.timeline { position: relative; } /* Preparo el contenedor de la línea de tiempo para posicionar elementos dentro de él. */
+.timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: var(--oro-choco); transform: translateX(-50%); } /* Creo la línea vertical central de la línea de tiempo. */
+.timeline-item { margin: 50px 0; position: relative; } /* Le doy margen a cada paso de la línea de tiempo. */
+.timeline-item:nth-child(odd) .timeline-content { text-align: right; padding-right: 60px; } /* A los pasos impares, les alineo el texto a la derecha y les doy espacio a la derecha. */
+.timeline-item:nth-child(even) .timeline-content { text-align: left; padding-left: 60px; } /* A los pasos pares, les alineo el texto a la izquierda y les doy espacio a la izquierda. */
+.timeline-icon { width: 60px; height: 60px; background: var(--oro-choco); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.8rem; z-index: 1; } /* Le doy estilo al círculo con el número de cada paso, y lo pongo justo en el centro de la línea. */
+
+#map { height: 400px; border-radius: 20px; } /* Le doy una altura fija y esquinas redondeadas al contenedor del mapa. */
+
+#themeToggle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; } /* Hago que el botón de cambiar tema sea un círculo y centro su icono. */
+
+[data-theme="dark"] .modal .form-control { /* Para el tema oscuro, le doy estilo a los campos de texto de las ventanas emergentes. */
+    background-color: #2a2a2a; /* Fondo gris oscuro. */
+    color: #fff; /* Texto blanco. */
+    border-color: #444; /* Borde gris. */
+}
+[data-theme="dark"] .modal .form-control::placeholder { /* Para el tema oscuro, le doy estilo al texto de ejemplo (placeholder). */
+    color: #6c757d; /* Un color gris más claro. */
+}
+[data-theme="dark"] .modal .form-label { /* Para el tema oscuro, le doy estilo a las etiquetas de los campos. */
+    color: #e0e0e0; /* Texto gris claro. */
 }
 
-/* Solución para formulario de contacto en tema oscuro */
-#contacto .form-control {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-    color: #fff;
+#contacto .form-control { /* Le doy estilo a los campos de texto específicos de la sección de contacto. */
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo blanco transparente. */
+    border-color: rgba(255, 255, 255, 0.5); /* Borde blanco semitransparente. */
+    color: #fff; /* Texto blanco. */
 }
 
-/* === CORRECCIÓN: ETIQUETAS EN MODALES Y FORMULARIOS OSCUROS === */
 
-/* 1. Etiquetas en modales (registro, login, etc.) */
-[data-theme="dark"] .modal .form-label,
-[data-theme="dark"] .modal label {
-    color: #e0e0e0 !important;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
+[data-theme="dark"] .modal .form-label, /* Para el tema oscuro, selecciono las etiquetas del formulario en las ventanas emergentes. */
+[data-theme="dark"] .modal label { /* También selecciono cualquier otra etiqueta por si acaso. */
+    color: #e0e0e0 !important; /* Les pongo color de texto gris claro, con '!important' para asegurar que gane. */
+    font-weight: 500; /* Les doy un grosor medio. */
+    margin-bottom: 0.5rem; /* Les doy un pequeño margen abajo. */
 }
 
-/* 2. Inputs en modales (fondo oscuro, texto claro) */
-[data-theme="dark"] .modal .form-control {
-    background-color: #2a2a2a !important;
-    color: #ffffff !important;
-    border: 1px solid #444 !important;
-    border-radius: 12px;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
+[data-theme="dark"] .modal .form-control { /* Para el tema oscuro, vuelvo a darle estilo a los campos de texto de las ventanas emergentes con más detalle. */
+    background-color: #2a2a2a !important; /* Fondo gris oscuro. */
+    color: #ffffff !important; /* Texto blanco. */
+    border: 1px solid #444 !important; /* Borde gris. */
+    border-radius: 12px; /* Redondeo un poco las esquinas. */
+    padding: 0.75rem 1rem; /* Les doy un buen espaciado interior. */
+    font-size: 1rem; /* Les pongo un tamaño de letra estándar. */
 }
-[data-theme="dark"] .modal .form-control::placeholder {
-    color: #888 !important;
-    opacity: 1;
-}
-
-/* 3. Botón de crear cuenta (gradiente visible) */
-[data-theme="dark"] .btn-crear-cuenta {
-    background: linear-gradient(45deg, #f4c430, #e67e22) !important;
-    color: white !important;
-    border: none;
-    border-radius: 50px;
-    padding: 0.9rem 2rem;
-    font-weight: 600;
-    font-size: 1.1rem;
-    width: 100%;
-    box-shadow: 0 8px 20px rgba(244, 196, 48, 0.3);
-    transition: all 0.3s ease;
-}
-[data-theme="dark"] .btn-crear-cuenta:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(244, 196, 48, 0.4);
+[data-theme="dark"] .modal .form-control::placeholder { /* Para el tema oscuro, le doy estilo al texto de ejemplo. */
+    color: #888 !important; /* Un color gris. */
+    opacity: 1; /* Me aseguro de que no sea transparente. */
 }
 
-/* 4. Título del modal (verde claro) */
-[data-theme="dark"] .modal-header {
-    background: var(--verde-rio);
-    color: white;
-    border-bottom: none;
-    border-radius: 16px 16px 0 0;
-    padding: 1rem 1.5rem;
+[data-theme="dark"] .btn-crear-cuenta { /* Para el tema oscuro, le doy estilo a un botón específico para crear cuenta. */
+    background: linear-gradient(45deg, #f4c430, #e67e22) !important; /* Le pongo un degradado de dorado a naranja. */
+    color: white !important; /* Texto blanco. */
+    border: none; /* Sin borde. */
+    border-radius: 50px; /* Muy redondeado. */
+    padding: 0.9rem 2rem; /* Espaciado interior. */
+    font-weight: 600; /* Texto en negrita. */
+    font-size: 1.1rem; /* Un poco más grande. */
+    width: 100%; /* Que ocupe todo el ancho. */
+    box-shadow: 0 8px 20px rgba(244, 196, 48, 0.3); /* Una sombra amarilla. */
+    transition: all 0.3s ease; /* Transición suave. */
 }
-[data-theme="dark"] .modal-header .btn-close {
-    filter: invert(1);
+[data-theme="dark"] .btn-crear-cuenta:hover { /* Cuando paso el ratón sobre ese botón. */
+    transform: translateY(-3px); /* Lo muevo un poquito hacia arriba. */
+    box-shadow: 0 12px 28px rgba(244, 196, 48, 0.4); /* Le aumento la sombra. */
 }
 
-/* 5. Fondo del modal */
-[data-theme="dark"] .modal-content {
-    background: #1a2a2a;
-    border: 1px solid #333;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+[data-theme="dark"] .modal-header { /* Para el tema oscuro, le doy estilo a la cabecera de las ventanas emergentes. */
+    background: var(--verde-rio); /* Fondo verde. */
+    color: white; /* Texto blanco. */
+    border-bottom: none; /* Sin borde abajo. */
+    border-radius: 16px 16px 0 0; /* Redondeo solo las esquinas de arriba. */
+    padding: 1rem 1.5rem; /* Espaciado interior. */
+}
+[data-theme="dark"] .modal-header .btn-close { /* Para el tema oscuro, le doy estilo al botón 'X' de cerrar. */
+    filter: invert(1); /* Invierto su color para que se vea blanco. */
+}
+
+[data-theme="dark"] .modal-content { /* Para el tema oscuro, le doy estilo al contenido de la ventana emergente. */
+    background: #1a2a2a; /* Un fondo verde muy oscuro. */
+    border: 1px solid #333; /* Un borde gris. */
+    border-radius: 16px; /* Redondeo las esquinas. */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5); /* Le pongo una sombra grande para que parezca que flota. */
 }

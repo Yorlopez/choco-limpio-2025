@@ -1,0 +1,11 @@
+body { /* Le doy estilo a todo el cuerpo de las páginas que usen este CSS. */
+    background: linear-gradient(135deg, #0f1a1e 0%, #1a2a2a 100%); /* Pongo un fondo degradado que va de un color casi negro a un verde muy oscuro. */
+    color: #e0e0e0; /* Establezco el color de texto por defecto a un gris claro. */
+    min-height: 100vh; /* Hago que el cuerpo ocupe al menos toda la altura de la pantalla. */
+}
+
+.navbar { /* Le doy estilo a la barra de navegación. */
+    background: rgba(26,95,61,0.97) !important; /* Le pongo un fondo verde casi opaco. El '!important' es para asegurar que este estilo gane sobre otros. */
+    backdrop-filter: blur(15px); /* Le aplico un efecto de desenfoque al fondo que se ve a través de la barra. */
+    border-bottom: 1px solid rgba(212,160,23,0.3); /* Le pongo un borde dorado semitransparente en la parte de abajo. */
+}

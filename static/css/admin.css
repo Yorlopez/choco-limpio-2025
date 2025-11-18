@@ -1,0 +1,25 @@
+:root { --verde-rio: #1a5f3d; --azul-pacifico: #0a3d62; --oro-choco: #d4a017; --texto: #e0e0e0; --bg: #0f1a1e; } /* Defino mis colores principales para usarlos más fácil en toda la hoja de estilos. */
+* { font-family: 'Inter', sans-serif; } /* Le digo que todos los elementos de la página usen la fuente 'Inter'. */
+h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; } /* Pero para los títulos, quiero usar la fuente 'Playfair Display' que es más elegante. */
+body { /* Le doy estilo a todo el cuerpo de la página. */
+    background: linear-gradient(135deg, var(--bg) 0%, #1a2a2a 100%); /* Pongo un fondo degradado que va de un color casi negro a un verde muy oscuro. */
+    color: var(--texto); /* Establezco el color de texto por defecto a un gris claro. */
+    min-height: 100vh; /* Hago que el cuerpo ocupe al menos toda la altura de la pantalla. */
+}
+.navbar { background: rgba(26,95,61,0.97); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(212,160,23,0.3); } /* Le doy a la barra de navegación un fondo verde semitransparente, un efecto de desenfoque y un borde dorado sutil abajo. */
+.live-time { color: var(--oro-choco); font-weight: 500; } /* Le doy color dorado y un grosor medio al texto de la hora. */
+.table { --bs-table-bg: rgba(255,255,255,0.05); --bs-table-striped-bg: rgba(255,255,255,0.08); --bs-table-color: var(--texto); --bs-table-border-color: rgba(212,160,23,0.2); } /* Personalizo los colores de la tabla de Bootstrap para que encaje con mi tema oscuro. */
+.lancha-img { /* Le doy estilo a la imagen de la lancha en la tabla. */
+    width: 100px; /* Le doy un ancho fijo de 100 píxeles. */
+    height: 75px; /* Le doy una altura fija de 75 píxeles. */
+    object-fit: cover; /* Hago que la imagen cubra todo el espacio sin deformarse, recortando si es necesario. */
+    border-radius: 0.5rem; /* Redondeo un poco las esquinas de la imagen. */
+}
+
+.mensaje-col { /* Le doy estilo a la columna del mensaje para que no se desborde. */
+    max-width: 300px; /* Le pongo un ancho máximo de 300 píxeles. */
+    min-width: 200px; /* Le pongo un ancho mínimo de 200 píxeles. */
+    white-space: nowrap; /* Evito que el texto se parta en varias líneas. */
+    overflow: hidden; /* Oculto el texto que no quepa. */
+    text-overflow: ellipsis; /* Pongo tres puntitos (...) al final del texto que se cortó. */
+}

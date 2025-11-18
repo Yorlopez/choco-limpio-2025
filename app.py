@@ -8,23 +8,18 @@ import ssl
 from functools import wraps
 from datetime import datetime, timedelta
 
-load_dotenv() # Carga las variables de entorno desde el archivo .env
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
-# Habilitar la función now() en las plantillas para usarla en el atributo 'max' de las fechas
 @app.context_processor
 def inject_now():
     return {'now': datetime.utcnow}
 
-# Supabase Config
-# Es mejor usar variables de entorno para esto en producción
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
-# Solución para el error SSL: EOF occurred in violation of protocol
-# Pasamos las opciones de red directamente al crear el cliente.
 options: ClientOptions = ClientOptions(
     postgrest_client_timeout=10,
     storage_client_timeout=10,
@@ -32,26 +27,26 @@ options: ClientOptions = ClientOptions(
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=options)
 
-# Ya no se necesita get_db() ni hash_password()
+def role_required(required_role):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if 'user_id' not in session:
+                return redirect('/')
+            
+            user_id = session['user_id']
+            user_profile = supabase.table('usuarios').select('rol').eq('id', user_id).single().execute()
 
-# === DECORADOR PARA PROTEGER RUTAS DE LANCHERO ===
-def lanchero_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            return redirect('/')
-        
-        user_id = session['user_id']
-        user_profile = supabase.table('usuarios').select('rol').eq('id', user_id).execute()
+            if not user_profile.data or user_profile.data.get('rol') != required_role:
+                return redirect('/dashboard')
+            
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
 
-        if not user_profile.data or user_profile.data[0].get('rol') != 'lanchero':
-            # Si no es lanchero, lo redirigimos a su dashboard normal.
-            return redirect('/dashboard')
-        
-        return f(*args, **kwargs)
-    return decorated_function
+lanchero_required = role_required('lanchero')
+admin_required = role_required('admin')
 
-# === INDEX ===
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if 'user_id' in session:
@@ -60,7 +55,6 @@ def index():
     if request.method == 'POST':
         action = request.form.get('action')
 
-        # === REGISTRO ===
         if action == 'register':
             nombre = request.form['nombre'].strip()
             telefono = request.form['telefono'].strip()
@@ -68,12 +62,21 @@ def index():
             barrio = request.form['barrio'].strip()
             contraseña = request.form['contraseña']
             fecha_nac_str = request.form.get('fecha_nac')
-            rol = request.form.get('rol', 'usuario') # Recibimos el rol
+            rol = request.form.get('rol', 'usuario')
+            mensaje_lanchero = None
+            foto_lancha_url = None
 
+            if rol == 'lanchero':
+                rol = 'lanchero_pendiente'
+                mensaje_lanchero = request.form.get('mensaje_lanchero', '').strip()
+                foto_lancha = request.files.get('foto_lancha')
+
+                if not mensaje_lanchero or not foto_lancha:
+                    return jsonify({'error': 'Para registrarte como lanchero, el mensaje y la foto de la lancha son obligatorios.'})
+            
             if not all([nombre, telefono, email, barrio, contraseña, fecha_nac_str]):
                 return jsonify({'error': 'Todos los campos son obligatorios'})
 
-            # --- VALIDACIÓN DE EDAD EN EL SERVIDOR ---
             try:
                 fecha_nac = datetime.strptime(fecha_nac_str, '%Y-%m-%d').date()
                 hoy = datetime.now().date()
@@ -85,64 +88,65 @@ def index():
                     return jsonify({'error': 'Debes ser mayor de 18 años para registrarte.'})
             except ValueError:
                 return jsonify({'error': 'El formato de la fecha de nacimiento es inválido.'})
-            # --- FIN DE VALIDACIÓN DE EDAD ---
 
-            # Validar que el nombre de usuario y el teléfono no existan en una sola consulta
-            existing_user_check = supabase.table('usuarios').select('nombre, telefono').or_(f'nombre.eq.{nombre},telefono.eq.{telefono}').execute()
-            if existing_user_check.data:
-                for user in existing_user_check.data:
-                    if user['nombre'] == nombre:
-                        return jsonify({'error': 'Este nombre de usuario ya está en uso. Por favor, elige otro.'})
-                    if user['telefono'] == telefono:
-                        return jsonify({'error': 'Este número de teléfono ya está registrado.'})
+            nombre_existente = supabase.table('usuarios').select('nombre').eq('nombre', nombre).execute()
+            if nombre_existente.data:
+                return jsonify({'error': 'Este nombre de usuario ya está en uso. Por favor, elige otro.'}), 409
+            telefono_existente = supabase.table('usuarios').select('telefono').eq('telefono', telefono).execute()
+            if telefono_existente.data:
+                return jsonify({'error': 'Este número de teléfono ya está registrado.'}), 409
 
             try:
-                # 1. Crear el usuario en Supabase Auth
+                if rol == 'lanchero_pendiente' and request.files.get('foto_lancha'):
+                    foto = request.files['foto_lancha']
+                    file_ext = foto.filename.rsplit('.', 1)[-1] if '.' in foto.filename else 'jpg'
+                    file_name = f'solicitud_{telefono}_{int(time.time())}.{file_ext}'
+                    
+                    supabase.storage.from_('lanchas_fotos').upload(
+                        file=foto.read(), 
+                        path=file_name, 
+                        file_options={"content-type": foto.content_type, "cache-control": "3600"}
+                    )
+                    foto_lancha_url = supabase.storage.from_('lanchas_fotos').get_public_url(file_name)
+
                 auth_response = supabase.auth.sign_up({
                     "email": email,
                     "password": contraseña,
                     "options": {
                         "data": {
-                            'nombre_completo': nombre,
+                            'nombre': nombre,
                             'telefono': telefono,
                             'barrio': barrio,
                             'fecha_nac': fecha_nac_str,
-                            'rol': rol  # Pasamos el rol a los metadatos
+                            'rol': rol,
+                            'mensaje_lanchero': mensaje_lanchero,
+                            'foto_lancha_url': foto_lancha_url
                         }
                     }
                 })
-                user = auth_response.user
 
-                # El perfil se creará automáticamente cuando el usuario verifique su correo.
-                # Ahora, en lugar de iniciar sesión, lo enviamos a la página de verificación.
-                # El usuario recibirá un código en su correo para confirmar.
                 return jsonify({'success': True, 'redirect': f'/verificar?email={email}'})
             except Exception as e:
-                # La API de Supabase puede devolver errores específicos
-                error_message = str(e)
-                if "User already registered" in error_message:
-                    return jsonify({'error': 'Este correo electrónico ya está registrado.'})
-                return jsonify({'error': f'Error al registrar: {error_message}'})
+                error_msg = str(e)
+                app.logger.error(f"Internal server error during registration: {error_msg}", exc_info=True)
+                
+                if "User already registered" in error_msg:
+                    return jsonify({'error': 'Este correo electrónico ya está registrado.'}), 409
+                
+                return jsonify({'error': 'Ha ocurrido un error interno inesperado. Por favor, contacta a soporte.'}), 500
 
-        # === LOGIN ===
         elif action == 'login':
             identificador = request.form['identificador'].strip()
             contraseña = request.form['contraseña']
 
             try:
                 email_to_login = identificador
-                # Si el identificador no es un email, búscalo en la tabla de usuarios
                 if '@' not in identificador:
-                    # Añadimos un pequeño reintento para manejar el retraso de la base de datos
-                    for _ in range(3): # Intentar hasta 3 veces
-                        query = supabase.table('usuarios').select('email').or_(f'telefono.eq.{identificador},nombre.eq.{identificador}').limit(1).execute()
-                        if query.data:
-                            email_to_login = query.data[0]['email']
-                            break # Salimos del bucle si encontramos al usuario
-                        time.sleep(0.5) # Esperamos medio segundo antes de reintentar
+                    query = supabase.table('usuarios').select('email').or_(f'telefono.eq.{identificador},nombre.eq.{identificador}').limit(1).execute()
                     
-                    if not query.data: # Si después de los reintentos no lo encontramos
-                        return jsonify({'error': 'Usuario no encontrado'})
+                    if not query.data:
+                        return jsonify({'error': 'Datos incorrectos'})
+                    email_to_login = query.data[0]['email']
 
                 auth_response = supabase.auth.sign_in_with_password({
                     "email": email_to_login,
@@ -151,22 +155,26 @@ def index():
                 user = auth_response.user
                 session['user_id'] = user.id
 
-                # Verificar el rol del usuario para la redirección
-                profile_response = supabase.table('usuarios').select('rol').eq('id', user.id).execute()
+                profile_response = supabase.table('usuarios').select('rol').eq('id', user.id).single().execute()
                 
-                redirect_url = '/dashboard'  # Redirección por defecto
-                if profile_response.data and profile_response.data[0].get('rol') == 'lanchero':
-                    redirect_url = '/lanchero'
+                redirect_url = '/dashboard'
+                if profile_response.data and profile_response.data.get('rol') == 'lanchero_pendiente':
+                    return jsonify({'error': 'Tu solicitud para ser lanchero aún está en revisión. Serás notificado por correo.'})
+
+                if profile_response.data:
+                    rol = profile_response.data.get('rol')
+                    if rol == 'lanchero':
+                        redirect_url = '/lanchero'
+                    elif rol == 'admin':
+                        redirect_url = '/admin/solicitudes'
 
                 return jsonify({'success': True, 'redirect': redirect_url})
 
             except Exception as e:
                 return jsonify({'error': 'Datos incorrectos'})
 
-    # GET: mostrar página
     return render_template('index.html')
 
-# === VERIFICACIÓN DE CUENTA POR CÓDIGO ===
 @app.route('/verificar', methods=['GET', 'POST'])
 def verificar():
     if request.method == 'POST':
@@ -177,13 +185,21 @@ def verificar():
             return render_template('verificar.html', email=email, error="El código es obligatorio.")
 
         try:
-            # Usamos verify_otp para confirmar el registro con el código
             verified_session = supabase.auth.verify_otp({
                 "email": email,
                 "token": token,
                 "type": "signup"
             })
-            session['user_id'] = verified_session.user.id
+            
+            user_id = verified_session.user.id
+            session['user_id'] = user_id
+
+            profile_response = supabase.table('usuarios').select('rol').eq('id', user_id).single().execute()
+
+            if profile_response.data and profile_response.data.get('rol') == 'lanchero_pendiente':
+                session.pop('user_id', None)
+                return redirect('/?mensaje=lanchero_pendiente')
+
             return redirect('/dashboard')
         except Exception as e:
             return render_template('verificar.html', email=email, error="Código incorrecto o expirado. Intenta de nuevo.")
@@ -191,7 +207,6 @@ def verificar():
     email = request.args.get('email')
     return render_template('verificar.html', email=email)
 
-# === RECUPERACIÓN DE CONTRASEÑA ===
 @app.route('/api/request-password-reset', methods=['POST'])
 def request_password_reset():
     email = request.form.get('email')
@@ -199,17 +214,14 @@ def request_password_reset():
         return jsonify({'success': False, 'error': 'El correo es obligatorio.'}), 400
     
     try:
-        # Supabase enviará un correo con un enlace que redirige a /reset-password
         supabase.auth.reset_password_for_email(email, options={'redirect_to': '/reset-password'})
         return jsonify({'success': True})
     except Exception as e:
-        # No revelamos si el correo existe o no por seguridad
         print(f"[ERROR PASSWORD RESET REQUEST] {e}")
-        return jsonify({'success': True}) # Siempre devolvemos éxito
+        return jsonify({'success': True})
 
 @app.route('/reset-password', methods=['GET'])
 def reset_password_page():
-    # Esta ruta simplemente sirve la página. La lógica está en el JS.
     return render_template('reset_password.html')
 
 @app.route('/api/update-password', methods=['POST'])
@@ -218,7 +230,6 @@ def update_password():
     supabase.auth.update_user(data['access_token'], {"password": data['new_password']})
     return jsonify({'success': True})
 
-# === DASHBOARD ===
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
@@ -226,11 +237,8 @@ def dashboard():
     
     user_id = session['user_id']
     
-    # Solución definitiva para el caché: si venimos de una actualización, esperamos un poco.
     if request.args.get('updated') == 'true':
-        # Esta pequeña pausa le da tiempo a la base de datos para sincronizar el cambio de nombre.
         time.sleep(1)
-        # Forzamos una recarga limpia de la página sin el parámetro.
         return redirect('/dashboard')
 
     try:
@@ -238,35 +246,30 @@ def dashboard():
         response = supabase.table('usuarios').select('*').eq('id', user_id).execute()
         
         if not response.data:
-            # Si no hay datos, el usuario no existe en la tabla. Sesión inválida.
             session.pop('user_id', None)
             return redirect('/')
 
-        user = response.data[0]  # Tomamos el primer (y único) resultado
+        user = response.data[0]
 
-        # 2. Obtener el Top 3 de usuarios por kg_reciclados
         top_users_response = supabase.table('usuarios').select('nombre, kg_reciclados').order('kg_reciclados', desc=True).limit(3).execute()
         top_users = top_users_response.data
 
-        # Aseguramos que los tipos de datos sean correctos para la plantilla
         user['kg_reciclados'] = float(user.get('kg_reciclados', 0.0))
         user['minutos'] = int(user.get('minutos', 0))
 
-        return render_template('dashboard.html', user=user, top_users=top_users)
+        return render_template('dashboard.html', user=user, top_users=top_users, supabase_key=SUPABASE_KEY)
 
     except Exception as e:
         print(f"[ERROR SUPABASE DASHBOARD] {e}")
         session.pop('user_id', None)
         return redirect('/')
 
-# === API PARA AUTO-UPDATE ===
 @app.route('/api/user')
 def api_user():
     if 'user_id' not in session:
         return jsonify({'success': False})
 
     try:
-        # Forzamos la obtención de los datos más recientes para evitar problemas de caché
         resp = supabase.table('usuarios').select('nombre, kg_reciclados, minutos') \
             .eq('id', session['user_id']) \
             .execute()
@@ -274,7 +277,6 @@ def api_user():
             return jsonify({'success': False})
         user = resp.data[0]
 
-        # Añadimos el Top 3 a la respuesta de la API
         top_users_response = supabase.table('usuarios').select('nombre, kg_reciclados').order('kg_reciclados', desc=True).limit(3).execute()
         top_users = top_users_response.data
 
@@ -291,7 +293,6 @@ def api_user():
         print(f"[ERROR API USER] {e}")
         return jsonify({'success': False})
 
-# === API PARA GRÁFICO SEMANAL ===
 @app.route('/api/weekly_progress')
 def weekly_progress():
     if 'user_id' not in session:
@@ -300,14 +301,12 @@ def weekly_progress():
     try:
         user_id = session['user_id']
         
-        # Obtener todos los reportes del usuario de la última semana
         response = supabase.table('reportes').select('created_at, kg_reportados') \
             .eq('user_id', user_id) \
             .eq('recogido', True) \
             .gte('created_at', (datetime.now() - timedelta(days=7)).isoformat()) \
             .execute()
 
-        # Procesar los datos para agruparlos por día
         daily_totals = { (datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d'): 0 for i in range(7) }
         for reporte in response.data:
             report_date = datetime.fromisoformat(reporte['created_at']).strftime('%Y-%m-%d')
@@ -318,7 +317,6 @@ def weekly_progress():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
-# === PERFIL ===
 @app.route('/perfil', methods=['GET', 'POST'])
 def perfil():
     if 'user_id' not in session:
@@ -328,23 +326,23 @@ def perfil():
 
     if request.method == 'POST':
         try:
-            data = request.get_json() # Usamos get_json() para leer los datos
+            data = request.get_json()
             nombre = data.get('nombre', '').strip()
             barrio = data.get('barrio', '').strip()
             email = data.get('email', '').strip()
 
-            # Validar que el nuevo nombre no esté en uso por OTRO usuario
             if nombre:
                 existing_user = supabase.table('usuarios').select('id').eq('nombre', nombre).neq('id', user_id).execute()
                 if existing_user.data:
                     return jsonify({'success': False, 'error': 'Ese nombre ya está en uso. Por favor, elige otro.'}), 400
 
-            if nombre and barrio:
-                update_data = {'nombre': nombre, 'barrio': barrio, 'email': email}
+            update_data = {}
+            if nombre: update_data['nombre'] = nombre
+            if barrio: update_data['barrio'] = barrio
+            if email: update_data['email'] = email
+
+            if update_data:
                 supabase.table('usuarios').update(update_data).eq('id', user_id).execute()
-                
-                if email:
-                    supabase.auth.update_user({"email": email})
             
             return jsonify({'success': True}) # Devolvemos una respuesta JSON
         except Exception as e:
@@ -361,7 +359,6 @@ def perfil():
         print(f"[ERROR PERFIL] {e}")
         return redirect('/dashboard')
 
-# === SUBIR FOTO DE PERFIL ===
 @app.route('/upload_avatar', methods=['POST'])
 def upload_avatar():
     if 'user_id' not in session:
@@ -374,7 +371,6 @@ def upload_avatar():
         return jsonify({'success': False, 'error': 'No se ha seleccionado ninguna imagen.'})
 
     try:
-        # Subir la imagen a un bucket 'avatars' en Supabase Storage
         file_ext = foto.filename.split('.')[-1]
         file_name = f'public/{user_id}.{file_ext}'
         
@@ -387,7 +383,6 @@ def upload_avatar():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
-# === ELIMINAR CUENTA ===
 @app.route('/api/delete_account', methods=['POST'])
 def delete_account():
     if 'user_id' not in session:
@@ -395,23 +390,25 @@ def delete_account():
 
     user_id = session['user_id']
     try:
-        # Para eliminar un usuario, necesitas usar la clave 'service_role'
-        # y llamar al método de admin.
+        user_profile = supabase.table('usuarios').select('avatar_url').eq('id', user_id).single().execute()
+        if user_profile.data and user_profile.data.get('avatar_url'):
+            avatar_url = user_profile.data['avatar_url']
+            file_path = avatar_url.split('/avatars/')[-1]
+            if file_path:
+                supabase.storage.from_('avatars').remove([file_path])
+
         supabase.auth.admin.delete_user(user_id)
-        session.pop('user_id', None) # Limpiar la sesión
+        session.clear()
         return jsonify({'success': True})
     except Exception as e:
         print(f"[ERROR DELETE ACCOUNT] {e}")
         return jsonify({'success': False, 'error': 'No se pudo eliminar la cuenta.'}), 500
 
-# === LANCHERO PANEL ===
 @app.route('/lanchero')
 @lanchero_required
 def lanchero_panel():
-    # El decorador @lanchero_required ya protege esta ruta.
     return render_template('lanchero.html')
 
-# === REPORTAR RECOLECCIÓN ===
 @app.route('/reportar', methods=['GET', 'POST'])
 def reportar():
     if 'user_id' not in session:
@@ -423,21 +420,17 @@ def reportar():
         ubicacion_desc = request.form.get('ubicacion')
         foto = request.files.get('foto')
 
-        # Hacemos que solo el peso y la foto sean obligatorios
         if not kg_reportados or not foto:
             return jsonify({'success': False, 'error': 'Todos los campos son obligatorios.'})
 
         try:
-            # Subir la imagen a Supabase Storage
             file_ext = foto.filename.split('.')[-1]
             file_name = f'public/{user_id}_{int(time.time())}.{file_ext}'
             
             supabase.storage.from_('reportes_fotos').upload(file=foto.read(), path=file_name, file_options={"content-type": foto.content_type})
             
-            # Obtener la URL pública de la imagen
             image_url = supabase.storage.from_('reportes_fotos').get_public_url(file_name)
 
-            # Insertar el reporte en la base de datos
             reporte_data = {
                 'user_id': user_id,
                 'kg_reportados': float(kg_reportados),
@@ -453,44 +446,87 @@ def reportar():
             print(f"Error al reportar: {e}")
             return jsonify({'success': False, 'error': str(e)})
 
-    return render_template('reportar.html') # Para el método GET
+    return render_template('reportar.html')
 
-# === MAPA DE PUNTOS ===
 @app.route('/mapa')
 def mapa():
     if 'user_id' not in session:
         return redirect('/')
-    # Muestra la página del mapa.
     return render_template('mapa.html')
 
-# === API PARA LANCHERO ===
 @app.route('/api/reportes')
 @lanchero_required
 def get_reportes():
-    # Obtener reportes no recogidos y la info del usuario asociado
-    # Añadimos la cabecera 'Prefer' para evitar problemas de caché y asegurar que obtenemos los datos más recientes.
-    response = supabase.table('reportes').select('*, usuarios(nombre, barrio)') \
+    response = supabase.postgrest.from_('reportes') \
+        .select('*, usuarios(nombre, barrio)', count='exact') \
         .eq('recogido', False).order('created_at', desc=True) \
         .execute()
+
     return jsonify(response.data)
 
 @app.route('/api/reporte/recoger/<int:reporte_id>', methods=['POST'])
 @lanchero_required
 def recoger_reporte(reporte_id):
     try:
-        # Marcar el reporte como recogido
-        # El trigger 'update_user_stats' se encargará de actualizar los kg del usuario
         supabase.table('reportes').update({'recogido': True}).eq('id', reporte_id).execute()
         return jsonify({'success': True})
     except Exception as e:
         print(f"Error al recoger reporte: {e}")
         return jsonify({'success': False, 'error': str(e)})
 
-# === LOGOUT ===
+@app.route('/admin/solicitudes')
+@admin_required
+def admin_solicitudes():
+    try:
+        user_id = session['user_id']
+        user_response = supabase.table('usuarios').select('*').eq('id', user_id).single().execute()
+        user = user_response.data
+        solicitudes_response = supabase.table('usuarios') \
+            .select('*') \
+            .eq('rol', 'lanchero_pendiente') \
+            .execute()
+        
+        solicitudes = solicitudes_response.data
+        return render_template('admin_solicitudes.html', solicitudes=solicitudes, user=user)
+    except Exception as e:
+        print(f"Error al cargar solicitudes de admin: {e}")
+        return "Error al cargar la página de administrador.", 500
+
+@app.route('/admin/solicitud/procesar', methods=['POST'])
+@admin_required
+def procesar_solicitud_admin():
+    data = request.get_json()
+    solicitud_id = data.get('solicitud_id')
+    accion = data.get('accion')
+
+    if not solicitud_id or not accion:
+        return jsonify({'success': False, 'error': 'Faltan datos.'}), 400
+
+    try:
+        if accion == 'aprobar':
+            supabase.table('usuarios').update({'rol': 'lanchero'}).eq('id', solicitud_id).execute()
+            
+            return jsonify({'success': True})
+        elif accion == 'rechazar':
+            supabase.auth.admin.delete_user(solicitud_id)
+            
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': 'Acción no válida.'}), 400
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect('/')
+
+@app.after_request
+def add_no_cache_headers(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 if __name__ == '__main__':
     print("CHOCÓ LIMPIO 2025 - INICIANDO EN http://127.0.0.1:5000")

@@ -1,9 +1,7 @@
 @echo off
 echo INICIANDO CHOCÓ LIMPIO 2025...
 echo.
-echo Activando entorno virtual y ejecutando la aplicacion...
 call "C:\Users\mosqu\OneDrive\Desktop\pfe\venv\Scripts\activate.bat"
 echo.
-echo Entorno activado. Iniciando servidor Flask...
 start "" python "C:\Users\mosqu\OneDrive\Desktop\pfe\app.py"
 pause

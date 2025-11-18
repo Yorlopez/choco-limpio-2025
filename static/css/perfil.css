@@ -1,32 +1,30 @@
- :root { --verde-rio: #1a5f3d; --oro-choco: #d4a017; --bg: #0f1a1e; }
-        body { background: linear-gradient(135deg, var(--bg) 0%, #1a2a2a 100%); color: #e0e0e0; min-height: 100vh; }
-        .navbar { background: rgba(26,95,61,0.95); backdrop-filter: blur(12px); }
-        .profile-card { background: rgba(255,255,255,0.08); border-radius: 24px; padding: 2rem; backdrop-filter: blur(12px); border: 1px solid rgba(212,160,23,0.2); }
-        .avatar { 
-            width: 120px; height: 120px; 
-            background: linear-gradient(135deg, var(--verde-rio), var(--oro-choco)); 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 3rem; color: white; margin: 0 auto;
-            object-fit: cover; /* Asegura que la imagen cubra el círculo */
-            border: 3px solid var(--oro-choco);
-        }
-        .edit-avatar-btn {
-            position: absolute; bottom: 0; right: 40%;
-            background: var(--oro-choco); color: #000;
-            width: 35px; height: 35px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; border: 2px solid var(--bg);
-        }
-        .btn-edit { background: var(--oro-choco); color: #000; border: none; }
-        .btn-edit:hover { background: #f1c40f; }
-
-        /* Estilos para el formulario en la página de perfil */
-        .form-control {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: rgba(212, 160, 23, 0.4);
-            color: #fff;
-        }
-        .form-control:disabled {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
+:root { --verde-rio: #1a5f3d; --oro-choco: #d4a017; --bg: #0f1a1e; } /* Defino mis colores principales para usarlos más fácil. */
+body { background: linear-gradient(135deg, var(--bg) 0%, #1a2a2a 100%); color: #e0e0e0; min-height: 100vh; } /* Pongo un fondo degradado, color de texto claro y altura mínima de toda la pantalla. */
+.navbar { background: rgba(26,95,61,0.95); backdrop-filter: blur(12px); } /* Le doy a la barra de navegación un fondo verde semitransparente y un efecto de desenfoque. */
+.profile-card { background: rgba(255,255,255,0.08); border-radius: 24px; padding: 2rem; backdrop-filter: blur(12px); border: 1px solid rgba(212,160,23,0.2); } /* Le doy estilo a la tarjeta del perfil: fondo transparente, esquinas redondeadas, espacio interior, desenfoque y un borde dorado sutil. */
+.avatar { /* Le doy estilo a la imagen de perfil. */
+    width: 120px; height: 120px; /* Le doy un tamaño fijo de 120x120 píxeles. */
+    background: linear-gradient(135deg, var(--verde-rio), var(--oro-choco)); /* Le pongo un fondo degradado por si no hay imagen. */
+    border-radius: 50%; /* La hago completamente redonda. */
+    display: flex; align-items: center; justify-content: center; /* Centro el contenido (por si es una letra en vez de una foto). */
+    font-size: 3rem; color: white; margin: 0 auto; /* Le doy tamaño y color a la letra, y centro la imagen horizontalmente. */
+    object-fit: cover; /* Hago que la imagen cubra todo el círculo sin deformarse. */
+    border: 3px solid var(--oro-choco); /* Le pongo un borde dorado de 3 píxeles. */
+}
+.edit-avatar-btn { /* Le doy estilo al botoncito para editar la foto. */
+    position: absolute; bottom: 0; right: 40%; /* Lo posiciono de forma absoluta en la parte de abajo y un poco a la derecha del centro de la foto. */
+    background: var(--oro-choco); color: #000; /* Le pongo fondo dorado y el icono negro. */
+    width: 35px; height: 35px; border-radius: 50%; /* Lo hago un círculo pequeño. */
+    display: flex; align-items: center; justify-content: center; /* Centro el icono del lápiz dentro del círculo. */
+    cursor: pointer; border: 2px solid var(--bg); /* Hago que el cursor sea una manito y le pongo un borde del color del fondo para que resalte. */
+}
+.btn-edit { background: var(--oro-choco); color: #000; border: none; } /* Le doy estilo al botón de "Guardar Cambios": fondo dorado, texto negro y sin borde. */
+.btn-edit:hover { background: #f1c40f; } /* Cuando paso el ratón sobre el botón, le cambio el color a un dorado más brillante. */
+.form-control { /* Le doy estilo a los campos del formulario. */
+    background-color: rgba(255, 255, 255, 0.1); /* Les pongo un fondo blanco transparente. */
+    border-color: rgba(212, 160, 23, 0.4); /* Les pongo un borde dorado semitransparente. */
+    color: #fff; /* Hago que el texto que se escribe sea blanco. */
+}
+.form-control:disabled { /* Le doy estilo a los campos que están deshabilitados (como el del teléfono). */
+    background-color: rgba(255, 255, 255, 0.05); /* Les pongo un fondo aún más transparente para que se vean diferentes. */
+}

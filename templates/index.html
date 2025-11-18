@@ -1,356 +1,365 @@
-<!DOCTYPE html>
-<html lang="es" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- FAVICONS -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}">
-    <title>Chocó Limpio | Reciclaje Fluvial Premium 2025</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <link rel="stylesheet" href="/static/css/index.css">
-</head>
-<body>
+<!DOCTYPE html> <!-- Le digo al navegador que este es un documento HTML5. -->
+<html lang="es" data-theme="light"> <!-- La etiqueta raíz de mi página, en español y con el tema claro por defecto. -->
+<head> <!-- Aquí va toda la información que el navegador necesita pero que no se ve en la página. -->
+    <meta charset="UTF-8"> <!-- Le digo al navegador que use los caracteres estándar para que no haya problemas con las tildes o la 'ñ'. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hago que la página se vea bien en cualquier dispositivo, adaptándose al ancho de la pantalla. -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}"> <!-- Este es el icono principal (favicon) de mi página. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}"> <!-- Un icono de 32x32 píxeles. -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}"> <!-- Un icono más pequeño de 16x16 píxeles. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"> <!-- El icono que se usará si alguien guarda mi web en la pantalla de inicio de un iPhone. -->
+    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}"> <!-- Un archivo que le da más información a los navegadores sobre mi aplicación web. -->
+    <title>Chocó Limpio | Reciclaje Fluvial Premium 2025</title> <!-- Este es el texto que aparece en la pestaña del navegador. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Cargo los estilos de Bootstrap desde un CDN para que todo se vea ordenado. -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"> <!-- Cargo las fuentes 'Playfair Display' e 'Inter' desde Google Fonts. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"> <!-- Cargo la librería de iconos de Bootstrap para poder usar iconitos. -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> <!-- Cargo los estilos de la librería AOS para las animaciones al hacer scroll. -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /> <!-- Cargo los estilos de Leaflet para poder mostrar el mapa. -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> <!-- Cargo la librería particles.js para la animación de partículas del fondo. -->
+    <link rel="stylesheet" href="/static/css/index.css"> <!-- Cargo mi propia hoja de estilos, donde personalizo la apariencia de esta página. -->
+</head> <!-- Aquí termina la sección de configuración de la cabeza. -->
+<body> <!-- Aquí empieza todo el contenido visible de mi página. -->
 
-    <div id="particles-js"></div>
+    <div id="particles-js"></div> <!-- Este es el contenedor donde la librería particles.js va a dibujar la animación. -->
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="#"><i class="bi bi-droplet-fill"></i> Chocó Limpio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#como">Cómo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-                    <li class="nav-item"><button id="themeToggle" class="btn btn-outline-light ms-3"><i class="bi bi-sun-fill"></i></button></li>
-                    <li class="nav-item"><button class="btn btn-outline-light ms-2" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="bi bi-person"></i> Iniciar</button></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <nav class="navbar navbar-expand-lg"> <!-- Creo la barra de navegación, que se expande en pantallas grandes. -->
+        <div class="container"> <!-- Pongo el contenido de la barra de navegación dentro de un contenedor para que esté centrado. -->
+            <a class="navbar-brand" href="#"><i class="bi bi-droplet-fill"></i> Chocó Limpio</a> <!-- El logo/nombre de la marca, que por ahora no lleva a ningún lado (#). -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"> <!-- El botón "hamburguesa" que aparece en celulares para mostrar/ocultar el menú. -->
+                <span class="navbar-toggler-icon"></span> <!-- El icono de tres rayitas para el botón. -->
+            </button> <!-- Cierro el botón hamburguesa. -->
+            <div class="collapse navbar-collapse" id="navbarNav"> <!-- Este es el contenedor del menú que se oculta en celulares. -->
+                <ul class="navbar-nav ms-auto"> <!-- Creo una lista de enlaces que se alineará a la derecha. -->
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li> <!-- Un enlace que lleva a la sección con el id 'inicio'. -->
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li> <!-- Un enlace que lleva a la sección de 'servicios'. -->
+                    <li class="nav-item"><a class="nav-link" href="#como">Cómo</a></li> <!-- Un enlace que lleva a la sección de 'como funciona'. -->
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li> <!-- Un enlace que lleva a la sección de 'contacto'. -->
+                    <li class="nav-item"><button id="themeToggle" class="btn btn-outline-light ms-3"><i class="bi bi-sun-fill"></i></button></li> <!-- Un botón para cambiar el tema (claro/oscuro), con un icono de sol. -->
+                    <li class="nav-item"><button class="btn btn-outline-light ms-2" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="bi bi-person"></i> Iniciar</button></li> <!-- Un botón que abre la ventana emergente (modal) para iniciar sesión. -->
+                </ul> <!-- Cierro la lista de enlaces. -->
+            </div> <!-- Cierro el contenedor del menú. -->
+        </div> <!-- Cierro el contenedor de la barra de navegación. -->
+    </nav> <!-- Cierro la barra de navegación. -->
 
-    <!-- HERO -->
-    <section id="inicio" class="hero d-flex align-items-center">
-        <video autoplay muted loop playsinline id="heroVideo">
-            <source src="{{ url_for('static', filename='assets/video-rio.mp4') }}" type="video/mp4">
-        </video>
-        <div class="container text-center" data-aos="fade-up">
-            <h1>Reciclamos el Río, Salvamos el Futuro</h1>
-            <p class="lead">Lanchas premium, pago en minutos, impacto real. Tú reciclas, el Chocó brilla.</p>
-            <button class="btn btn-premium btn-lg mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">
-                Únete al Cambio <i class="bi bi-arrow-right ms-2"></i>
-            </button>
-        </div>
-    </section>
+    <section id="inicio" class="hero d-flex align-items-center"> <!-- La sección principal de la página, con el id 'inicio' para los enlaces. -->
+        <video autoplay muted loop playsinline id="heroVideo"> <!-- Pongo un video de fondo que se reproduce solo, sin sonido y en bucle. -->
+            <source src="{{ url_for('static', filename='assets/video-rio.mp4') }}" type="video/mp4"> <!-- Le digo al navegador dónde está el archivo de video. -->
+        </video> <!-- Cierro la etiqueta del video. -->
+        <div class="container text-center" data-aos="fade-up"> <!-- Un contenedor para el texto que va sobre el video. La animación hará que aparezca desde abajo. -->
+            <h1>Reciclamos el Río, Salvamos el Futuro</h1> <!-- El título principal de la página. -->
+            <p class="lead">Lanchas premium, pago en minutos, impacto real. Tú reciclas, el Chocó brilla.</p> <!-- Un subtítulo o eslogan. -->
+            <button class="btn btn-premium btn-lg mt-4" data-bs-toggle="modal" data-bs-target="#registerModal"> <!-- El botón principal, que abre la ventana emergente para registrarse. -->
+                Únete al Cambio <i class="bi bi-arrow-right ms-2"></i> <!-- El texto del botón con un icono de flecha. -->
+            </button> <!-- Cierro el botón. -->
+        </div> <!-- Cierro el contenedor del texto. -->
+    </section> <!-- Cierro la sección principal. -->
 
-    <!-- SERVICIOS -->
-    <section id="servicios">
-        <div class="container">
-            <div class="text-center mb-5" data-aos="fade-up">
-                <h2 class="display-5">Servicios Premium Fluvial</h2>
-                <p class="lead">Tecnología de punta para el Chocó real</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card-premium text-center p-4 h-100">
-                        <div class="icon"><i class="bi bi-truck"></i></div>
-                        <h5>Lanchas GPS</h5>
-                        <p>Rutas en vivo, notificaciones por WhatsApp, llegada en <strong>15 min</strong>.</p>
-                    </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card-premium text-center p-4 h-100">
-                        <div class="icon"><i class="bi bi-phone-vibrate"></i></div>
-                        <h5>Minutos Premium</h5>
-                        <p>1 kg = 15 min. Recargas al instante. <strong>¡Sin saldo, sin problema!</strong></p>
-                    </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="card-premium text-center p-4 h-100">
-                        <div class="icon"><i class="bi bi-shield-check"></i></div>
-                        <h5>Certificado INVEMAR</h5>
-                        <p>Impacto medible: <strong>1 kg = 1 árbol plantado</strong> en el Atrato.</p>
-                    </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
-                    <div class="card-premium text-center p-4 h-100">
-                        <div class="icon"><i class="bi bi-currency-exchange"></i></div>
-                        <h5>Pago en Efectivo</h5>
-                        <p>Opción para quienes no usan minutos. <strong>$1.500 por kg</strong>.</p>
-                    </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
-                    <div class="card-premium text-center p-4 h-100">
-                        <div class="icon"><i class="bi bi-people"></i></div>
-                        <h5>Comunidad Activa</h5>
-                        <p>Grupos de WhatsApp por barrio. <strong>¡Gana bonos por referidos!</strong></p>
-                    </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
-                    <div class="card-premium text-center p-4 h-100">
-                        <div class="icon"><i class="bi bi-trophy"></i></div>
-                        <h5>Ranking Mensual</h5>
-                        <p>Top 10 recicladores ganan <strong>1 hora de internet gratis</strong>.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section id="servicios"> <!-- La sección que describe los servicios, con el id 'servicios'. -->
+        <div class="container"> <!-- Un contenedor para centrar el contenido de la sección. -->
+            <div class="text-center mb-5" data-aos="fade-up"> <!-- El título de la sección, centrado y con animación. -->
+                <h2 class="display-5">Servicios Premium Fluvial</h2> <!-- El título. -->
+                <p class="lead">Tecnología de punta para el Chocó real</p> <!-- El subtítulo. -->
+            </div> <!-- Cierro el contenedor del título. -->
+            <div class="row g-4"> <!-- Una fila para organizar las tarjetas de servicios en columnas. -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100"> <!-- La primera columna/tarjeta, que aparece con un pequeño retraso. -->
+                    <div class="card-premium text-center p-4 h-100"> <!-- La tarjeta con estilos personalizados. -->
+                        <div class="icon"><i class="bi bi-truck"></i></div> <!-- El icono para esta tarjeta. -->
+                        <h5>Lanchas GPS</h5> <!-- El título del servicio. -->
+                        <p>Rutas en vivo, notificaciones por WhatsApp, llegada en <strong>15 min</strong>.</p> <!-- La descripción del servicio. -->
+                    </div> <!-- Cierro la tarjeta. -->
+                </div> <!-- Cierro la columna. -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200"> <!-- La segunda tarjeta, con un poco más de retraso. -->
+                    <div class="card-premium text-center p-4 h-100"> <!-- La tarjeta. -->
+                        <div class="icon"><i class="bi bi-phone-vibrate"></i></div> <!-- El icono. -->
+                        <h5>Minutos Premium</h5> <!-- El título. -->
+                        <p>1 kg = 15 min. Recargas al instante. <strong>¡Sin saldo, sin problema!</strong></p> <!-- La descripción. -->
+                    </div> <!-- Cierro la tarjeta. -->
+                </div> <!-- Cierro la columna. -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300"> <!-- La tercera tarjeta. -->
+                    <div class="card-premium text-center p-4 h-100"> <!-- La tarjeta. -->
+                        <div class="icon"><i class="bi bi-shield-check"></i></div> <!-- El icono. -->
+                        <h5>Certificado INVEMAR</h5> <!-- El título. -->
+                        <p>Impacto medible: <strong>1 kg = 1 árbol plantado</strong> en el Atrato.</p> <!-- La descripción. -->
+                    </div> <!-- Cierro la tarjeta. -->
+                </div> <!-- Cierro la columna. -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="400"> <!-- La cuarta tarjeta. -->
+                    <div class="card-premium text-center p-4 h-100"> <!-- La tarjeta. -->
+                        <div class="icon"><i class="bi bi-currency-exchange"></i></div> <!-- El icono. -->
+                        <h5>Pago en Efectivo</h5> <!-- El título. -->
+                        <p>Opción para quienes no usan minutos. <strong>$1.500 por kg</strong>.</p> <!-- La descripción. -->
+                    </div> <!-- Cierro la tarjeta. -->
+                </div> <!-- Cierro la columna. -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="500"> <!-- La quinta tarjeta. -->
+                    <div class="card-premium text-center p-4 h-100"> <!-- La tarjeta. -->
+                        <div class="icon"><i class="bi bi-people"></i></div> <!-- El icono. -->
+                        <h5>Comunidad Activa</h5> <!-- El título. -->
+                        <p>Grupos de WhatsApp por barrio. <strong>¡Gana bonos por referidos!</strong></p> <!-- La descripción. -->
+                    </div> <!-- Cierro la tarjeta. -->
+                </div> <!-- Cierro la columna. -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="600"> <!-- La sexta tarjeta. -->
+                    <div class="card-premium text-center p-4 h-100"> <!-- La tarjeta. -->
+                        <div class="icon"><i class="bi bi-trophy"></i></div> <!-- El icono. -->
+                        <h5>Ranking Mensual</h5> <!-- El título. -->
+                        <p>Top 10 recicladores ganan <strong>1 hora de internet gratis</strong>.</p> <!-- La descripción. -->
+                    </div> <!-- Cierro la tarjeta. -->
+                </div> <!-- Cierro la columna. -->
+            </div> <!-- Cierro la fila de tarjetas. -->
+        </div> <!-- Cierro el contenedor de la sección. -->
+    </section> <!-- Cierro la sección de servicios. -->
 
-    <!-- CÓMO FUNCIONA -->
-    <section id="como">
-        <div class="container">
-            <div class="text-center mb-5" data-aos="fade-up">
-                <h2 class="display-5">¿Cómo Funciona?</h2>
-                <p class="lead">5 pasos simples para cambiar el río</p>
-            </div>
-            <div class="timeline" data-aos="fade-up">
-                <div class="timeline-item">
-                    <div class="timeline-icon"><i class="bi bi-1-circle-fill"></i></div>
-                    <div class="timeline-content">
-                        <h5>Separa en casa</h5>
-                        <p>Plástico, vidrio, metal y orgánicos en bolsas diferentes.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-icon"><i class="bi bi-2-circle-fill"></i></div>
-                    <div class="timeline-content">
-                        <h5>Pesa y fotografía</h5>
-                        <p>Usa tu celular. 1 foto = 1 reporte.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-icon"><i class="bi bi-3-circle-fill"></i></div>
-                    <div class="timeline-content">
-                        <h5>Envía por WhatsApp</h5>
-                        <p>Manda foto + peso al <strong>312 456 7890</strong>.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-icon"><i class="bi bi-4-circle-fill"></i></div>
-                    <div class="timeline-content">
-                        <h5>Lancha GPS llega</h5>
-                        <p>Notificación en vivo. <strong>ETA exacta</strong>.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-icon"><i class="bi bi-5-circle-fill"></i></div>
-                    <div class="timeline-content">
-                        <h5>¡Gana al instante!</h5>
-                        <p>Minutos en tu celular o efectivo. <strong>¡Tú eliges!</strong></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section id="como"> <!-- La sección que explica el proceso, con el id 'como'. -->
+        <div class="container"> <!-- Un contenedor para centrar el contenido. -->
+            <div class="text-center mb-5" data-aos="fade-up"> <!-- El título de la sección. -->
+                <h2 class="display-5">¿Cómo Funciona?</h2> <!-- El título. -->
+                <p class="lead">5 pasos simples para cambiar el río</p> <!-- El subtítulo. -->
+            </div> <!-- Cierro el contenedor del título. -->
+            <div class="timeline" data-aos="fade-up"> <!-- El contenedor de la línea de tiempo, con animación. -->
+                <div class="timeline-item"> <!-- El primer paso de la línea de tiempo. -->
+                    <div class="timeline-icon"><i class="bi bi-1-circle-fill"></i></div> <!-- El icono con el número 1. -->
+                    <div class="timeline-content"> <!-- El contenido de texto para este paso. -->
+                        <h5>Separa en casa</h5> <!-- El título del paso. -->
+                        <p>Plástico, vidrio, metal y orgánicos en bolsas diferentes.</p> <!-- La descripción del paso. -->
+                    </div> <!-- Cierro el contenido. -->
+                </div> <!-- Cierro el primer paso. -->
+                <div class="timeline-item"> <!-- El segundo paso. -->
+                    <div class="timeline-icon"><i class="bi bi-2-circle-fill"></i></div> <!-- El icono con el número 2. -->
+                    <div class="timeline-content"> <!-- El contenido. -->
+                        <h5>Pesa y fotografía</h5> <!-- El título. -->
+                        <p>Usa tu celular. 1 foto = 1 reporte.</p> <!-- La descripción. -->
+                    </div> <!-- Cierro el contenido. -->
+                </div> <!-- Cierro el segundo paso. -->
+                <div class="timeline-item"> <!-- El tercer paso. -->
+                    <div class="timeline-icon"><i class="bi bi-3-circle-fill"></i></div> <!-- El icono con el número 3. -->
+                    <div class="timeline-content"> <!-- El contenido. -->
+                        <h5>Envía por WhatsApp</h5> <!-- El título. -->
+                        <p>Manda foto + peso al <strong>312 456 7890</strong>.</p> <!-- La descripción. -->
+                    </div> <!-- Cierro el contenido. -->
+                </div> <!-- Cierro el tercer paso. -->
+                <div class="timeline-item"> <!-- El cuarto paso. -->
+                    <div class="timeline-icon"><i class="bi bi-4-circle-fill"></i></div> <!-- El icono con el número 4. -->
+                    <div class="timeline-content"> <!-- El contenido. -->
+                        <h5>Lancha GPS llega</h5> <!-- El título. -->
+                        <p>Notificación en vivo. <strong>ETA exacta</strong>.</p> <!-- La descripción. -->
+                    </div> <!-- Cierro el contenido. -->
+                </div> <!-- Cierro el cuarto paso. -->
+                <div class="timeline-item"> <!-- El quinto paso. -->
+                    <div class="timeline-icon"><i class="bi bi-5-circle-fill"></i></div> <!-- El icono con el número 5. -->
+                    <div class="timeline-content"> <!-- El contenido. -->
+                        <h5>¡Gana al instante!</h5> <!-- El título. -->
+                        <p>Minutos en tu celular o efectivo. <strong>¡Tú eliges!</strong></p> <!-- La descripción. -->
+                    </div> <!-- Cierro el contenido. -->
+                </div> <!-- Cierro el quinto paso. -->
+            </div> <!-- Cierro la línea de tiempo. -->
+        </div> <!-- Cierro el contenedor de la sección. -->
+    </section> <!-- Cierro la sección del proceso. -->
 
-    <!-- CONTACTO -->
-    <section id="contacto">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6" data-aos="fade-right">
-                    <h2 class="display-5 mb-4">Contáctanos</h2>
-                    <form>
-                        <div class="mb-3">
-                            <input type="text" class="form-control form-control-lg" placeholder="Tu nombre" required>
-                        </div>
-                        <div class="mb-3">
-                            <input type="tel" class="form-control form-control-lg" placeholder="312 456 7890" required>
-                        </div>
-                        <div class="mb-3">
-                            <textarea class="form-control form-control-lg" rows="4" placeholder="Tu mensaje"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-light btn-lg w-100">Enviar Mensaje</button>
-                    </form>
-                    <div class="mt-4">
-                        <p><strong>Horarios:</strong> Lunes a Sábado 6:00 AM - 6:00 PM</p>
-                        <p><fl><strong>WhatsApp:</strong> <a href="https://wa.me/573137527364" class="text-white">313 752 7364</a></p>
-                        <p><strong>Correo:</strong> mosqueralopezyoryani@gmail.com</p>
-                    </div>
-                </div>
-                <div class="col-lg-6" data-aos="fade-left">
-                    <div id="map"></div>
-                    <div class="mt-3 text-center">
-                        <small class="text-white-50">Punto de recolección principal: Muelle Turístico, Quibdó</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section id="contacto"> <!-- La sección de contacto, con el id 'contacto'. -->
+        <div class="container"> <!-- Un contenedor para centrar el contenido. -->
+            <div class="row"> <!-- Una fila para poner el formulario y el mapa uno al lado del otro. -->
+                <div class="col-lg-6" data-aos="fade-right"> <!-- La columna de la izquierda, para el formulario. -->
+                    <h2 class="display-5 mb-4">Contáctanos</h2> <!-- El título de la sección. -->
+                    <form> <!-- El formulario de contacto (actualmente no hace nada). -->
+                        <div class="mb-3"> <!-- Un contenedor para el campo de nombre. -->
+                            <input type="text" class="form-control form-control-lg" placeholder="Tu nombre" required> <!-- El campo para el nombre. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Un contenedor para el campo de teléfono. -->
+                            <input type="tel" class="form-control form-control-lg" placeholder="312 456 7890" required> <!-- El campo para el teléfono. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Un contenedor para el campo de mensaje. -->
+                            <textarea class="form-control form-control-lg" rows="4" placeholder="Tu mensaje"></textarea> <!-- El área de texto para el mensaje. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <button type="submit" class="btn btn-light btn-lg w-100">Enviar Mensaje</button> <!-- El botón para enviar el formulario. -->
+                    </form> <!-- Cierro el formulario. -->
+                    <div class="mt-4"> <!-- Un contenedor para la información de contacto adicional. -->
+                        <p><strong>Horarios:</strong> Lunes a Sábado 6:00 AM - 6:00 PM</p> <!-- El texto de los horarios. -->
+                        <p><fl><strong>WhatsApp:</strong> <a href="https://wa.me/573137527364" class="text-white">313 752 7364</a></p> <!-- El número de WhatsApp como un enlace. -->
+                        <p><strong>Correo:</strong> mosqueralopezyoryani@gmail.com</p> <!-- El correo de contacto. -->
+                    </div> <!-- Cierro el contenedor de información. -->
+                </div> <!-- Cierro la columna del formulario. -->
+                <div class="col-lg-6" data-aos="fade-left"> <!-- La columna de la derecha, para el mapa. -->
+                    <div id="map"></div> <!-- El contenedor donde mi JavaScript va a dibujar el mapa. -->
+                    <div class="mt-3 text-center"> <!-- Un contenedor para el texto debajo del mapa. -->
+                        <small class="text-white-50">Punto de recolección principal: Muelle Turístico, Quibdó</small> <!-- El texto que describe el punto del mapa. -->
+                    </div> <!-- Cierro el contenedor del texto. -->
+                </div> <!-- Cierro la columna del mapa. -->
+            </div> <!-- Cierro la fila. -->
+        </div> <!-- Cierro el contenedor de la sección. -->
+    </section> <!-- Cierro la sección de contacto. -->
 
-    <!-- FOOTER -->
-    <footer class="py-5 text-white" style="background: linear-gradient(135deg, var(--azul-pacifico), var(--verde-rio));">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Chocó Limpio Premium 2025</h5>
-                    <p>Reciclaje fluvial con tecnología de punta. Por el río, para la gente.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <p><strong>Conéctate:</strong></p>
-                    <a href="#" class="text-white me-3"><i class="bi bi-whatsapp fs-3"></i></a>
-                    <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-3"></i></a>
-                    <a href="#" class="text-white"><i class="bi bi-facebook fs-3"></i></a>
-                </div>
-            </div>
-            <hr class="bg-white opacity-20">
-            <div class="text-center">
-                <small>© 2025 Chocó Limpio. Hecho con orgullo en Quibdó, Chocó.</small>
-            </div>
-        </div>
-    </footer>
+    <footer class="py-5 text-white" style="background: linear-gradient(135deg, var(--azul-pacifico), var(--verde-rio));"> <!-- El pie de página, con un fondo degradado. -->
+        <div class="container"> <!-- Un contenedor para centrar el contenido del pie de página. -->
+            <div class="row"> <!-- Una fila para organizar el contenido del pie de página. -->
+                <div class="col-md-6"> <!-- La columna de la izquierda. -->
+                    <h5>Chocó Limpio Premium 2025</h5> <!-- El nombre del proyecto. -->
+                    <p>Reciclaje fluvial con tecnología de punta. Por el río, para la gente.</p> <!-- Un eslogan o descripción corta. -->
+                </div> <!-- Cierro la columna. -->
+                <div class="col-md-6 text-md-end"> <!-- La columna de la derecha, con el texto alineado a la derecha en pantallas grandes. -->
+                    <p><strong>Conéctate:</strong></p> <!-- Un texto para las redes sociales. -->
+                    <a href="#" class="text-white me-3"><i class="bi bi-whatsapp fs-3"></i></a> <!-- Un icono de WhatsApp (el enlace no lleva a ningún lado). -->
+                    <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-3"></i></a> <!-- Un icono de Instagram. -->
+                    <a href="#" class="text-white"><i class="bi bi-facebook fs-3"></i></a> <!-- Un icono de Facebook. -->
+                </div> <!-- Cierro la columna. -->
+            </div> <!-- Cierro la fila. -->
+            <hr class="bg-white opacity-20"> <!-- Una línea horizontal semitransparente para separar. -->
+            <div class="text-center"> <!-- Un contenedor para centrar el texto del copyright. -->
+                <small>© 2025 Chocó Limpio. Hecho con orgullo en Quibdó, Chocó.</small> <!-- El texto del copyright. -->
+            </div> <!-- Cierro el contenedor. -->
+        </div> <!-- Cierro el contenedor del pie de página. -->
+    </footer> <!-- Cierro el pie de página. -->
 
-    <!-- MODAL LOGIN (CORREGIDO) -->
-    <div class="modal fade" id="loginModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Iniciar Sesión</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="loginForm">
-                        <div class="mb-3">
-                            <label class="form-label">Teléfono, nombre o correo</label>
-                            <input type="text" id="loginIdentificador" class="form-control" placeholder="3124567890" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Contraseña</label>
-                            <input type="password" id="loginContraseña" class="form-control" placeholder="Mínimo 6 caracteres" required>
-                        </div>
-                        <button type="submit" class="btn btn-premium w-100">Entrar</button>
-                    </form>
-                    <div id="loginError" class="text-danger text-center mt-3 fw-bold" style="display:none;"></div>
-                    <div class="text-center mt-3">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#recuperarModal" data-bs-dismiss="modal">¿Olvidaste tu contraseña?</a>
-                    </div>
-                    {% if config.DEBUG %}
-                    <div class="alert alert-info mt-4">
-                        <small>
-                            <strong>Acceso Lanchero (Prueba):</strong><br>
-                            Correo: <code>yanimosquerayor@gmail.com</code><br>
-                            Contraseña: <code>123456</code>
-                        </small>
-                        <hr class="my-2 border-secondary">
-                        <small>
-                            <strong>Acceso Usuario (Prueba):</strong><br>
-                            Correo: <code>mosqueralopezyoryani@gmail.com</code><br>
-                            Contraseña: <code>123456</code>
-                        </small>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Modal para Iniciar Sesión. -->
+    <div class="modal fade" id="loginModal" tabindex="-1"> <!-- El contenedor principal de la ventana emergente de login. -->
+        <div class="modal-dialog modal-dialog-centered"> <!-- El cuadro de diálogo, centrado en la pantalla. -->
+            <div class="modal-content"> <!-- El contenido de la ventana. -->
+                <div class="modal-header"> <!-- La cabecera de la ventana. -->
+                    <h5 class="modal-title">Iniciar Sesión</h5> <!-- El título. -->
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button> <!-- El botón 'X' para cerrar la ventana. -->
+                </div> <!-- Cierro la cabecera. -->
+                <div class="modal-body p-4"> <!-- El cuerpo de la ventana, con algo de espacio interior. -->
+                    <form id="loginForm"> <!-- El formulario de inicio de sesión. -->
+                        <div class="mb-3"> <!-- Un contenedor para el campo de identificador. -->
+                            <label class="form-label">Teléfono, nombre o correo</label> <!-- La etiqueta del campo. -->
+                            <input type="text" id="loginIdentificador" class="form-control" placeholder="3124567890" required> <!-- El campo para escribir el identificador. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Un contenedor para el campo de contraseña. -->
+                            <label class="form-label">Contraseña</label> <!-- La etiqueta. -->
+                            <input type="password" id="loginContraseña" class="form-control" placeholder="Mínimo 6 caracteres" required> <!-- El campo para la contraseña. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <button type="submit" class="btn btn-premium w-100">Entrar</button> <!-- El botón para enviar el formulario. -->
+                    </form> <!-- Cierro el formulario. -->
+                    <div id="loginError" class="text-danger text-center mt-3 fw-bold" style="display:none;"></div> <!-- Un espacio oculto donde mi JavaScript mostrará los errores. -->
+                    <div class="text-center mt-3"> <!-- Un contenedor para el enlace de recuperar contraseña. -->
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#recuperarModal" data-bs-dismiss="modal">¿Olvidaste tu contraseña?</a> <!-- Un enlace que cierra esta ventana y abre la de recuperar contraseña. -->
+                    </div> <!-- Cierro el contenedor. -->
+                    {% if config.DEBUG %} <!-- Reviso si mi aplicación Flask está en modo de desarrollo. -->
+                    <div class="alert alert-info mt-4"> <!-- Si es así, muestro una alerta con información de prueba. -->
+                        <small> <!-- Un texto pequeño. -->
+                            <strong>Acceso Usuario (Prueba):</strong><br> <!-- Título para los datos de usuario. -->
+                            Correo: <code>yoryanimosqueralopez@gmail.com</code><br> <!-- El correo de prueba. -->
+                            Contraseña: <code>123456</code> <!-- La contraseña de prueba. -->
+                        </small> <!-- Cierro el texto. -->
+                        <hr class="my-2 border-secondary"> <!-- Una línea para separar. -->
+                        <small> <!-- Otro texto pequeño. -->
+                            <strong>Acceso Lanchero (Prueba):</strong><br> <!-- Título para los datos de lanchero. -->
+                            Correo: <code>yanimosquerayor@gmail.com</code><br> <!-- El correo de prueba. -->
+                            Contraseña: <code>123456</code> <!-- La contraseña de prueba. -->
+                        </small> <!-- Cierro el texto. -->
+                        <hr class="my-2 border-secondary"> <!-- Otra línea para separar. -->
+                        <small> <!-- Otro texto pequeño. -->
+                            <strong>Acceso Administrador (Prueba):</strong><br> <!-- Título para los datos de admin. -->
+                            Correo: <code>mosqueralopezyoryani@gmail.com</code><br> <!-- El correo de prueba. -->
+                            Contraseña: <code>123456</code> <!-- La contraseña de prueba. -->
+                        </small> <!-- Cierro el texto. -->
+                    </div> <!-- Cierro la alerta de información. -->
+                    {% endif %} <!-- Termino la condición del 'if'. -->
+                </div> <!-- Cierro el cuerpo de la ventana. -->
+            </div> <!-- Cierro el contenido. -->
+        </div> <!-- Cierro el cuadro de diálogo. -->
+    </div> <!-- Cierro la ventana emergente. -->
 
-    <!-- MODAL REGISTRO (CORREGIDO 100%) -->
-    <div class="modal fade" id="registerModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Crear Cuenta</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="registerForm">
-                        <div class="mb-3">
-                            <label class="form-label">Nombre completo</label>
-                            <input type="text" id="regNombre" class="form-control" placeholder="Juan Pérez" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Teléfono (WhatsApp)</label>
-                            <input type="tel" id="regTelefono" class="form-control" placeholder="3124567890" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Correo electrónico</label>
-                            <input type="email" id="regEmail" class="form-control" placeholder="juan@gmail.com" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Barrio / Vereda</label>
-                            <input type="text" id="regBarrio" class="form-control" placeholder="ej: La Yesquita" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Fecha de Nacimiento</label>
-                            <input type="date" id="regFechaNac" class="form-control" required max="{{ now().strftime('%Y-%m-%d') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Crea una contraseña</label>
-                            <input type="password" id="regContraseña" class="form-control" placeholder="Mínimo 6 caracteres" required minlength="6">
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="regComoLanchero">
-                            <label class="form-check-label" for="regComoLanchero">
-                                Registrarme como lanchero
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-premium w-100">Crear cuenta</button>
-                    </form>
-                    <div id="registerError" class="text-danger text-center mt-3 fw-bold" style="display:none;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Modal para Registrarse. -->
+    <div class="modal fade" id="registerModal" tabindex="-1"> <!-- El contenedor principal de la ventana emergente de registro. -->
+        <div class="modal-dialog modal-dialog-centered"> <!-- El cuadro de diálogo, centrado. -->
+            <div class="modal-content"> <!-- El contenido de la ventana. -->
+                <div class="modal-header"> <!-- La cabecera. -->
+                    <h5 class="modal-title">Crear Cuenta</h5> <!-- El título. -->
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button> <!-- El botón 'X' para cerrar. -->
+                </div> <!-- Cierro la cabecera. -->
+                <div class="modal-body p-4"> <!-- El cuerpo de la ventana. -->
+                    <form id="registerForm"> <!-- El formulario de registro. -->
+                        <div class="mb-3"> <!-- Contenedor para el campo de nombre. -->
+                            <label class="form-label">Nombre completo</label> <!-- La etiqueta. -->
+                            <input type="text" id="regNombre" class="form-control" placeholder="Juan Pérez" required> <!-- El campo para el nombre. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Contenedor para el campo de teléfono. -->
+                            <label class="form-label">Teléfono (WhatsApp)</label> <!-- La etiqueta. -->
+                            <input type="tel" id="regTelefono" class="form-control" placeholder="3124567890" required> <!-- El campo para el teléfono. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Contenedor para el campo de correo. -->
+                            <label class="form-label">Correo electrónico</label> <!-- La etiqueta. -->
+                            <input type="email" id="regEmail" class="form-control" placeholder="juan@gmail.com" required> <!-- El campo para el correo. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Contenedor para el campo de barrio. -->
+                            <label class="form-label">Barrio / Vereda</label> <!-- La etiqueta. -->
+                            <input type="text" id="regBarrio" class="form-control" placeholder="ej: La Yesquita" required> <!-- El campo para el barrio. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Contenedor para la fecha de nacimiento. -->
+                            <label class="form-label">Fecha de Nacimiento</label> <!-- La etiqueta. -->
+                            <input type="date" id="regFechaNac" class="form-control" required max="{{ now().strftime('%Y-%m-%d') }}"> <!-- El campo de fecha, con la fecha de hoy como máximo. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Contenedor para la contraseña. -->
+                            <label class="form-label">Crea una contraseña</label> <!-- La etiqueta. -->
+                            <input type="password" id="regContraseña" class="form-control" placeholder="Mínimo 6 caracteres" required minlength="6"> <!-- El campo de contraseña, que exige al menos 6 caracteres. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="form-check mb-3"> <!-- El contenedor para el checkbox de lanchero. -->
+                            <input class="form-check-input" type="checkbox" id="regComoLanchero"> <!-- El checkbox en sí. -->
+                            <label class="form-check-label" for="regComoLanchero"> <!-- La etiqueta del checkbox. -->
+                                Registrarme como lanchero <!-- El texto de la etiqueta. -->
+                            </label> <!-- Cierro la etiqueta. -->
+                        </div> <!-- Cierro el contenedor del checkbox. -->
+                        <div id="lancheroFields" class="d-none"> <!-- Un contenedor para los campos de lanchero, que está oculto por defecto. -->
+                            <div class="mb-3"> <!-- Contenedor para el mensaje del lanchero. -->
+                                <label for="regMensajeLanchero" class="form-label">¿Por qué quieres unirte?</label> <!-- La etiqueta. -->
+                                <textarea class="form-control" id="regMensajeLanchero" rows="3" placeholder="Describe brevemente tu experiencia y motivación."></textarea> <!-- El área de texto para el mensaje. -->
+                            </div> <!-- Cierro el contenedor. -->
+                            <div class="mb-3"> <!-- Contenedor para la foto de la lancha. -->
+                                <label for="regFotoLancha" class="form-label">Foto de la lancha</label> <!-- La etiqueta. -->
+                                <input class="form-control" type="file" id="regFotoLancha" accept="image/*"> <!-- El campo para subir la foto, que solo acepta imágenes. -->
+                            </div> <!-- Cierro el contenedor. -->
+                        </div> <!-- Cierro el contenedor de los campos de lanchero. -->
+                        <button type="submit" class="btn btn-premium w-100">Crear cuenta</button> <!-- El botón para enviar el formulario de registro. -->
+                    </form> <!-- Cierro el formulario. -->
+                    <div id="registerError" class="text-danger text-center mt-3 fw-bold" style="display:none;"></div> <!-- Un espacio oculto donde mi JavaScript mostrará los errores de registro. -->
+                </div> <!-- Cierro el cuerpo de la ventana. -->
+            </div> <!-- Cierro el contenido. -->
+        </div> <!-- Cierro el cuadro de diálogo. -->
+    </div> <!-- Cierro la ventana emergente. -->
 
-    <!-- MODAL RECUPERAR (CORREGIDO) -->
-    <div class="modal fade" id="recuperarModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title">Recuperar Contraseña</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="recuperarForm">
-                        <p class="text-white-50 mb-3">Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
-                        <div class="mb-3">
-                            <label class="form-label">Correo electrónico registrado</label>
-                            <input type="email" class="form-control" id="recuperarEmail" placeholder="tu@correo.com" required>
-                        </div>
-                        <button type="submit" class="btn btn-premium w-100">Enviar enlace</button>
-                    </form>
-                    <div id="pasoPregunta" style="display: none;">
-                        <hr>
-                        <p><strong>Pregunta de seguridad:</strong></p>
-                        <p id="preguntaTexto" class="fw-bold"></p>
-                        <div class="mb-3">
-                            <input type="text" class="form-control" id="respuestaInput" placeholder="Tu respuesta" required>
-                        </div>
-                        <button class="btn btn-success w-100" onclick="verificarRespuesta()">Verificar</button>
-                    </div>
-                    <div id="pasoNuevaContra" style="display: none;">
-                        <hr>
-                        <p><strong>Crea una nueva contraseña</strong></p>
-                        <div class="mb-3">
-                            <input type="password" class="form-control" id="nuevaContra" placeholder="Mínimo 6 caracteres" required>
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" class="form-control" id="confirmarContra" placeholder="Repite la contraseña" required>
-                        </div>
-                        <button class="btn btn-premium w-100" onclick="cambiarContraseña()">Cambiar Contraseña</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Modal para Recuperar Contraseña. -->
+    <div class="modal fade" id="recuperarModal" tabindex="-1"> <!-- El contenedor principal de la ventana de recuperación. -->
+        <div class="modal-dialog modal-dialog-centered"> <!-- El cuadro de diálogo, centrado. -->
+            <div class="modal-content"> <!-- El contenido. -->
+                <div class="modal-header bg-warning text-dark"> <!-- La cabecera, con un fondo amarillo. -->
+                    <h5 class="modal-title">Recuperar Contraseña</h5> <!-- El título. -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> <!-- El botón 'X' para cerrar. -->
+                </div> <!-- Cierro la cabecera. -->
+                <div class="modal-body p-4"> <!-- El cuerpo de la ventana. -->
+                    <form id="recuperarForm"> <!-- El formulario para pedir el enlace de recuperación. -->
+                        <p class="text-white-50 mb-3">Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p> <!-- Un texto de ayuda. -->
+                        <div class="mb-3"> <!-- Contenedor para el campo de correo. -->
+                            <label class="form-label">Correo electrónico registrado</label> <!-- La etiqueta. -->
+                            <input type="email" class="form-control" id="recuperarEmail" placeholder="tu@correo.com" required> <!-- El campo para el correo. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <button type="submit" class="btn btn-premium w-100">Enviar enlace</button> <!-- El botón para enviar el formulario. -->
+                    </form> <!-- Cierro el formulario. -->
+                    <div id="pasoPregunta" style="display: none;"> <!-- Una sección oculta para un futuro sistema de preguntas de seguridad. -->
+                        <hr> <!-- Una línea para separar. -->
+                        <p><strong>Pregunta de seguridad:</strong></p> <!-- El título. -->
+                        <p id="preguntaTexto" class="fw-bold"></p> <!-- El espacio para la pregunta. -->
+                        <div class="mb-3"> <!-- Contenedor para la respuesta. -->
+                            <input type="text" class="form-control" id="respuestaInput" placeholder="Tu respuesta" required> <!-- El campo para la respuesta. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <button class="btn btn-success w-100" onclick="verificarRespuesta()">Verificar</button> <!-- El botón para verificar. -->
+                    </div> <!-- Cierro la sección. -->
+                    <div id="pasoNuevaContra" style="display: none;"> <!-- Otra sección oculta para crear la nueva contraseña. -->
+                        <hr> <!-- Una línea para separar. -->
+                        <p><strong>Crea una nueva contraseña</strong></p> <!-- El título. -->
+                        <div class="mb-3"> <!-- Contenedor para la nueva contraseña. -->
+                            <input type="password" class="form-control" id="nuevaContra" placeholder="Mínimo 6 caracteres" required> <!-- El campo. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <div class="mb-3"> <!-- Contenedor para confirmar la contraseña. -->
+                            <input type="password" class="form-control" id="confirmarContra" placeholder="Repite la contraseña" required> <!-- El campo. -->
+                        </div> <!-- Cierro el contenedor. -->
+                        <button class="btn btn-premium w-100" onclick="cambiarContraseña()">Cambiar Contraseña</button> <!-- El botón para cambiarla. -->
+                    </div> <!-- Cierro la sección. -->
+                </div> <!-- Cierro el cuerpo de la ventana. -->
+            </div> <!-- Cierro el contenido. -->
+        </div> <!-- Cierro el cuadro de diálogo. -->
+    </div> <!-- Cierro la ventana emergente. -->
 
-    <!-- SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="/static/js/index.js"></script>
-</body>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> <!-- Cargo el JavaScript de Bootstrap para que funcionen cosas como los modales. -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> <!-- Cargo el script de la librería de animaciones AOS. -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> <!-- Cargo el script de Leaflet para el mapa. -->
+    <script src="/static/js/index.js"></script> <!-- Cargo mi script principal que controla toda la lógica de esta página. -->
+
+</body> <!-- Aquí se termina el contenido visible de la página. -->
+</html> <!-- Y aquí se termina mi archivo HTML. -->

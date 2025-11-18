@@ -1,28 +1,27 @@
-body {
-    background-color: #1a1a1a;
-    color: #f0f0f0;
+body { /* Le doy estilo a todo el cuerpo de la página. */
+    background-color: #1a1a1a; /* Le pongo un color de fondo gris muy oscuro. */
+    color: #f0f0f0; /* Establezco el color de texto por defecto a un gris claro. */
 }
 
-.reporte-card {
-    background-color: #2c2c2c;
-    border: 1px solid #444;
-    border-radius: 15px;
-    transition: transform 0.2s;
+.reporte-card { /* Le doy estilo a cada tarjeta de reporte. */
+    background-color: #2c2c2c; /* Le pongo un fondo gris un poco más claro. */
+    border: 1px solid #444; /* Le pongo un borde gris oscuro. */
+    border-radius: 15px; /* Redondeo las esquinas. */
+    transition: transform 0.2s; /* Hago que cualquier transformación (como moverla) ocurra suavemente. */
 }
 
-/* Solución para el texto invisible en las tarjetas */
-.reporte-card .card-body {
-    color: #f0f0f0; /* Forzamos un color de texto claro */
+.reporte-card .card-body { /* Le doy estilo al cuerpo de la tarjeta. */
+    color: #f0f0f0;  /* Me aseguro de que el texto dentro del cuerpo sea gris claro. */
 }
 
-.reporte-card:hover {
-    transform: translateY(-5px);
+.reporte-card:hover { /* Defino lo que pasa cuando paso el ratón sobre la tarjeta. */
+    transform: translateY(-5px); /* La muevo 5 píxeles hacia arriba. */
 }
 
-.reporte-imagen {
-    height: 200px;
-    object-fit: cover;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    cursor: pointer; /* Indica que la imagen es clickeable */
+.reporte-imagen { /* Le doy estilo a la imagen de cada reporte. */
+    height: 200px; /* Le doy una altura fija de 200 píxeles. */
+    object-fit: cover; /* Hago que la imagen cubra todo el espacio sin deformarse, recortando si es necesario. */
+    border-top-left-radius: 15px; /* Redondeo la esquina superior izquierda para que coincida con la tarjeta. */
+    border-top-right-radius: 15px; /* Redondeo la esquina superior derecha también. */
+    cursor: pointer;  /* Hago que el cursor se convierta en una manito al pasar sobre la imagen. */
 }

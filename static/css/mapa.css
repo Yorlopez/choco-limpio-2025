@@ -1,4 +1,3 @@
-  body { background: #0f1a1e; color: white; min-height: 100vh; }
-        .navbar { background: rgba(26,95,61,0.95); }
-        .map-container { height: 80vh; background: #1a2a44; border-radius: 20px; }
-        
+body { background: #0f1a1e; color: white; min-height: 100vh; } /* Le doy a la página un fondo oscuro, texto blanco y una altura mínima igual a la de la pantalla. */
+.navbar { background: rgba(26,95,61,0.95); } /* Le pongo a la barra de navegación un fondo verde casi opaco. */
+.map-container { height: 80vh; background: #1a2a44; border-radius: 20px; } /* Le doy al contenedor del mapa una altura del 80% de la pantalla, un fondo azul oscuro y esquinas redondeadas. */

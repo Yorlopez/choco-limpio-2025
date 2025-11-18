@@ -1,18 +1,18 @@
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #121212;
-            color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .message-card {
-            background-color: #1e1e1e;
-            padding: 3rem;
-            border-radius: 15px;
-            border: 1px solid #333;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
+body { /* Le doy estilo a todo el cuerpo de la página. */
+    font-family: 'Inter', sans-serif; /* Establezco la fuente principal. */
+    background-color: #121212; /* Le pongo un color de fondo casi negro. */
+    color: #f0f0f0; /* Establezco el color de texto por defecto a un gris claro. */
+    display: flex; /* Activo el modo 'flexbox' para centrar el contenido fácilmente. */
+    align-items: center; /* Centro el contenido verticalmente. */
+    justify-content: center; /* Centro el contenido horizontalmente. */
+    min-height: 100vh; /* Hago que el cuerpo ocupe al menos toda la altura de la pantalla. */
+}
+.message-card { /* Le doy estilo a la tarjeta que muestra el mensaje. */
+    background-color: #1e1e1e; /* Le pongo un fondo gris oscuro. */
+    padding: 3rem; /* Le doy un buen espacio interior. */
+    border-radius: 15px; /* Redondeo las esquinas. */
+    border: 1px solid #333; /* Le pongo un borde gris. */
+    max-width: 500px; /* Le pongo un ancho máximo para que no se estire demasiado en pantallas grandes. */
+    width: 100%; /* Hago que ocupe todo el ancho disponible hasta el máximo. */
+    text-align: center; /* Centro todo el texto dentro de la tarjeta. */
+}
